@@ -1,6 +1,6 @@
 # NGINX Stack
 
-This repository contains a set of docker-compose files to run NGINX with Sidecar Certbot.
+This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
 
 ## Features
 
