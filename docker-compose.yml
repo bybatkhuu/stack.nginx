@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   certbot:
-    image: ${IMG_NAMESCAPE}/certbot:latest
+    image: ${IMG_NAMESCAPE}/certbot:1.1.2-230330
     restart: unless-stopped
     environment:
       - TERM=${TERM:-xterm}
@@ -18,7 +18,7 @@ services:
     tty: true
 
   nginx:
-    image: ${IMG_NAMESCAPE}/nginx:latest
+    image: ${IMG_NAMESCAPE}/nginx:1.0.2-230330
     depends_on:
       - certbot
     restart: unless-stopped
