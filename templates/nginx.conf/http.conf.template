@@ -1,0 +1,57 @@
+upstream api-server {
+	server 127.0.0.1:8000;
+
+	## Or Load Balancing:
+	# least_conn;
+	# hash ${DOLLAR}binary_remote_addr consistent;
+	# server 127.0.0.1:8000;
+	# server 127.0.0.1:8001;
+	# server 127.0.0.1:8002;
+}
+
+
+## HTTP:
+server {
+	listen 80;
+	listen [::]:80;
+
+	## Logging:
+	access_log /dev/stdout combined;
+	access_log /var/log/nginx/access.${DOLLAR}map_date_now.log combined;
+	access_log /var/log/nginx/access.json.${DOLLAR}map_date_now.log json_combined;
+
+	## Restrict methods:
+	if (${DOLLAR}request_method !~ ^(GET|POST|PUT|PATCH|DELETE|HEAD|CONNECT|OPTIONS)${DOLLAR}) {
+		return '405';
+	}
+
+	## Security headers:
+	include /etc/nginx/conf.d/security-headers.conf;
+
+	## Additional configs:
+	include /etc/nginx/conf.d/general.conf;
+	include /etc/nginx/conf.d/well-known.conf;
+
+	## Static files:
+	root /var/www/web/public;
+
+	location / {
+		try_files ${DOLLAR}uri ${DOLLAR}uri/ =404;
+	}
+
+	## Sub-path as static files:
+	# location ^~ /demo {
+	# 	alias /var/www/demo/public;
+	# 	try_files ${_DOLLAR}uri ${_DOLLAR}uri/ =404;
+	# }
+
+	location ^~ /api {
+		rewrite ^/api/(.*)${DOLLAR} /${DOLLAR}1?${DOLLAR}args break;
+		proxy_set_header Host ${DOLLAR}host;
+		include /etc/nginx/conf.d/proxy.conf;
+		include /etc/nginx/conf.d/api-headers.conf;
+		proxy_pass http://api-server;
+	}
+
+	# include /etc/nginx/conf.d/status.conf;
+}

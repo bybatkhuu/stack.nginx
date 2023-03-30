@@ -1,0 +1,114 @@
+upstream api-server {
+	server 127.0.0.1:8000;
+
+	## Or Load Balancing:
+	# least_conn;
+	# hash ${DOLLAR}binary_remote_addr consistent;
+	# server 127.0.0.1:8000;
+	# server 127.0.0.1:8001;
+	# server 127.0.0.1:8002;
+}
+
+
+# Main domain as static files (HTTPS):
+server {
+	listen 443 ssl http2;
+	listen [::]:443 ssl http2;
+	server_name example.com www.example.com;
+
+	## Logging:
+	access_log /dev/stdout combined;
+	access_log /var/log/nginx/example.com.access.${DOLLAR}map_date_now.log combined;
+	access_log /var/log/nginx/example.com.access.json.${DOLLAR}map_date_now.log json_combined;
+
+	## Restrict methods:
+	if (${DOLLAR}request_method !~ ^(GET|POST|PUT|PATCH|DELETE|HEAD|CONNECT|OPTIONS)${DOLLAR}) {
+		return '405';
+	}
+
+	## SSL:
+	include /etc/nginx/conf.d/ssl.conf;
+	ssl_stapling on;
+	ssl_certificate /etc/nginx/ssl/live/example.com/fullchain.pem;
+	ssl_certificate_key /etc/nginx/ssl/live/example.com/privkey.pem;
+	ssl_trusted_certificate /etc/nginx/ssl/live/example.com/chain.pem;
+
+	## Security headers:
+	add_header Expect-CT "max-age=604800, report-uri='https://example.com/report'" always;
+	add_header Access-Control-Allow-Origin "https://example.com" always;
+	include /etc/nginx/conf.d/security-headers.conf;
+
+	## Additional configs:
+	include /etc/nginx/conf.d/general.conf;
+	include /etc/nginx/conf.d/well-known.conf;
+
+	## Static files:
+	root /var/www/example.com/public;
+
+	location / {
+		try_files ${DOLLAR}uri ${DOLLAR}uri/ =404;
+	}
+
+	## Sub-path as static files:
+	# location ^~ /demo {
+	# 	alias /var/www/demo.example.com/public;
+	# 	try_files ${_DOLLAR}uri ${_DOLLAR}uri/ =404;
+	# }
+
+	# include /etc/nginx/conf.d/status.conf;
+}
+
+## Subdomain as reverse proxy (HTTPS):
+server {
+	listen 443 ssl http2;
+	listen [::]:443 ssl http2;
+	server_name api.example.com;
+
+	## Logging:
+	access_log /dev/stdout combined;
+	access_log /var/log/nginx/api.example.com.access.${DOLLAR}map_date_now.log combined;
+	access_log /var/log/nginx/api.example.com.access.json.${DOLLAR}map_date_now.log json_combined;
+
+	## Restrict methods:
+	if (${DOLLAR}request_method !~ ^(GET|POST|PUT|PATCH|DELETE|HEAD|CONNECT|OPTIONS)${DOLLAR}) {
+		return '405';
+	}
+
+	## SSL:
+	include /etc/nginx/conf.d/ssl.conf;
+	ssl_stapling on;
+	ssl_certificate /etc/nginx/ssl/live/example.com/fullchain.pem;
+	ssl_certificate_key /etc/nginx/ssl/live/example.com/privkey.pem;
+	ssl_trusted_certificate /etc/nginx/ssl/live/example.com/chain.pem;
+
+	## Security headers:
+	add_header Expect-CT "max-age=604800, report-uri='https://example.com/report'" always;
+	# add_header Access-Control-Allow-Origin "https://example.com" always;
+	# include /etc/nginx/conf.d/security-headers.conf;
+	include /etc/nginx/conf.d/api-headers.conf;
+
+	## Additional configs:
+	include /etc/nginx/conf.d/general.conf;
+	include /etc/nginx/conf.d/well-known.conf;
+
+	## Reverse proxy:
+	location / {
+		# rewrite ^/api/(.*)${DOLLAR} /${DOLLAR}1?${DOLLAR}args break;
+		proxy_set_header Host ${DOLLAR}host;
+		include /etc/nginx/conf.d/proxy.conf;
+		proxy_pass http://api-server;
+	}
+}
+
+## HTTP redirect:
+server {
+	listen 80;
+	listen [::]:80;
+	server_name .example.com;
+
+	include /etc/nginx/conf.d/letsencrypt.conf;
+
+	location / {
+		return 301 https://${DOLLAR}host${DOLLAR}request_uri;
+	}
+}

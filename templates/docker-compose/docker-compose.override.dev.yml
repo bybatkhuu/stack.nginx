@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  certbot:
+    # env_file:
+    #   - .env
+    volumes:
+      # - "./volumes/storage/certbot/secrets:/root/.secrets/certbot"
+      # - "./volumes/storage/certbot/secrets:/root/.aws"
+      - "./volumes/.vscode-server:/root/.vscode-server"
+    # deploy:
+    #   replicas: 0
+    #   resources:
+    #     limits:
+    #       cpus: "0.5"
+    #       memory: 256M
+    # network_mode: bridge
+    # ports:
+    #   - "80:80"
+    # command: ["--new=webroot"]
+    # command: ["--renew=standalone"]
+    # command: ["--disable-renew"]
+    # command: ["--dns=cloudflare"]
+    # command: ["--dns=digitalocean"]
+    # command: ["--dns=route53"]
+    # command: ["--dns=google"]
+    # command: ["--dns=godaddy"]
+    # command: ["/bin/bash"]
+
+  nginx:
+    # environment:
+    #   - NGINX_BASIC_AUTH_USER=${NGINX_BASIC_AUTH_USER}
+    #   - NGINX_BASIC_AUTH_PASS=${NGINX_BASIC_AUTH_PASS}
+    # env_file:
+    #   - .env
+    volumes:
+      - "./volumes/storage/nginx/configs/sites-enabled:/etc/nginx/sites-enabled"
+      - "./volumes/.vscode-server:/root/.vscode-server"
+    # deploy:
+    #   replicas: 0
+    #   resources:
+    #     limits:
+    #       cpus: "1.0"
+    #       memory: 1G
+    # network_mode: bridge
+    # ports:
+    #   - "${NGINX_HTTPS_PORT:-443}:${NGINX_HTTPS_PORT:-443}"
+    #   - "${NGINX_HTTP_PORT:-80}:${NGINX_HTTP_PORT:-80}"
+    # command: ["--https=self"]
+    # command: ["--https=valid"]
+    # command: ["--https=lets"]
+    # command: ["/bin/bash"]
