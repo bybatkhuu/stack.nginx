@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   certbot:
+    image: ${IMG_NAMESCAPE}/certbot:latest
     # env_file:
     #   - .env
     volumes:
@@ -28,6 +29,7 @@ services:
     # command: ["/bin/bash"]
 
   nginx:
+    image: ${IMG_NAMESCAPE}/nginx:latest
     # environment:
     #   - NGINX_BASIC_AUTH_USER=${NGINX_BASIC_AUTH_USER}
     #   - NGINX_BASIC_AUTH_PASS=${NGINX_BASIC_AUTH_PASS}
