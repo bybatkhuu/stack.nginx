@@ -1,0 +1,57 @@
+name: Deployment
+
+on:
+  push:
+    tags:
+      - "v*.*.*-*"
+  pull_request:
+    tags:
+      - "v*.*.*-*"
+  workflow_dispatch:
+
+jobs:
+  bump_version:
+    name: Deploy
+    runs-on: ubuntu-22.04
+    if: ${{ github.ref_type == 'tag' }}
+    steps:
+      -
+        name: Configure ZeroTier
+        uses: zerotier/github-action@v1.0.1
+        with:
+          network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
+          auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
+      -
+        name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          cat >> ~/.ssh/config <<END
+          Host prod_server
+            HostName ${{ secrets.ZEROTIER_HOST_IP }}
+            User ${{ secrets.SSH_USER }}
+            IdentityFile ~/.ssh/id_rsa
+            StrictHostKeyChecking no
+          END
+      -
+        name: Stop services
+        run: ssh prod_server 'cd ${{ secrets.PROJECT_PATH }} && docker compose down'
+      -
+        name: Backup
+        run: ssh prod_server 'cd ${{ secrets.PROJECT_PATH }} && ./scripts/backup.sh'
+      -
+        name: Update to latest version
+        run: ssh prod_server 'cd ${{ secrets.PROJECT_PATH }} && git fetch && git reset --hard origin/main && docker compose pull'
+      -
+        name: Start services
+        if: ${{ always() }}
+        run: ssh prod_server 'cd ${{ secrets.PROJECT_PATH }} && docker compose up -d'
+      -
+        name: Test deployment
+        run: curl -I ${{ secrets.ZEROTIER_HOST_IP }}:${{ secrets.SERVER_PORT }} || exit 2
+      -
+        name: Trigger release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run 3.create-release.yml -r ${GITHUB_REF_NAME}
