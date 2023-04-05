@@ -62,6 +62,9 @@ jobs:
           done
           echo "Success!"
       -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
         name: Trigger release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
