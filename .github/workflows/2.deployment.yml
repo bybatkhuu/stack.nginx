@@ -51,7 +51,7 @@ jobs:
         run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && docker compose up -d'
       -
         name: Test deployment
-        run: curl -kI ${{ secrets.ZEROTIER_HOST }}:${{ secrets.SERVICE_PORT }} || exit 2
+        run: curl -kI https://${{ secrets.ZEROTIER_HOST }} || exit 2
       -
         name: Trigger release
         env:
