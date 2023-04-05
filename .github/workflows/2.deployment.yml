@@ -54,7 +54,7 @@ jobs:
         name: Test deployment
         shell: bash
         run: |
-          count=20
+          count=30
           while ! curl -kI https://${{ secrets.HOST }} ; do
             echo "Waiting...";
             sleep 3;
