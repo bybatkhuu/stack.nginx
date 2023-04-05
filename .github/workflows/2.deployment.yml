@@ -55,7 +55,7 @@ jobs:
         shell: bash
         run: |
           count=10
-          while ! curl -kI https://${{ secrets.ZEROTIER_HOST }} ; do
+          while ! curl -kI https://${{ secrets.HOST }} ; do
             echo "Waiting...";
             sleep 3;
             let count=count-1
