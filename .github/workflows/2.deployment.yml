@@ -56,7 +56,7 @@ jobs:
           count=10
           while ! curl -kI https://${{ secrets.ZEROTIER_HOST }} ; do
             echo "Waiting...";
-            sleep 1;
+            sleep 3;
             let count=count-1
           done
           echo "Success!"
