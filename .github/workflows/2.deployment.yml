@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-22.04
     if: ${{ github.ref_type == 'tag' }}
     permissions:
+      contents: read
       actions: write
     steps:
       -
