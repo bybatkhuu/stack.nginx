@@ -29,27 +29,27 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           cat >> ~/.ssh/config <<END
           Host prod_server
-            HostName ${{ secrets.ZEROTIER_HOST_IP }}
+            HostName ${{ secrets.ZEROTIER_HOST }}
             User ${{ secrets.SSH_USER }}
             IdentityFile ~/.ssh/id_rsa
             StrictHostKeyChecking no
           END
       -
         name: Stop services
-        run: ssh prod_server 'cd ${{ secrets.PROJECT_PATH }} && docker compose down'
+        run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && docker compose down'
       -
         name: Backup
-        run: ssh prod_server 'cd ${{ secrets.PROJECT_PATH }} && ./scripts/backup.sh'
+        run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && ./scripts/backup.sh'
       -
         name: Update to latest version
-        run: ssh prod_server 'cd ${{ secrets.PROJECT_PATH }} && git fetch && git reset --hard origin/main && docker compose pull'
+        run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && git fetch && git reset --hard origin/main && docker compose pull'
       -
         name: Start services
         if: ${{ always() }}
-        run: ssh prod_server 'cd ${{ secrets.PROJECT_PATH }} && docker compose up -d'
+        run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && docker compose up -d'
       -
         name: Test deployment
-        run: curl -I ${{ secrets.ZEROTIER_HOST_IP }}:${{ secrets.SERVER_PORT }} || exit 2
+        run: curl -kI ${{ secrets.ZEROTIER_HOST }}:${{ secrets.SERVICE_PORT }} || exit 2
       -
         name: Trigger release
         env:
