@@ -18,7 +18,7 @@ services:
     tty: true
 
   nginx:
-    image: ${IMG_NAMESCAPE}/nginx:1.0.2-230330
+    image: ${IMG_NAMESCAPE}/nginx:1.1.0-230406
     depends_on:
       - certbot
     restart: unless-stopped
