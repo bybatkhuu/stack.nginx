@@ -10,6 +10,7 @@ changelog:
   - title: ✨ Features
     labels:
     - feature
+    - features
     - enhancement
     - minor
     - semver-minor
@@ -17,6 +18,7 @@ changelog:
     labels:
     - fix
     - bug
+    - bugs
     - bugfix
     - patch
     - semver-patch

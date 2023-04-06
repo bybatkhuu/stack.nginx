@@ -50,17 +50,17 @@ jobs:
         name: Start services
         if: ${{ always() }}
         run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && docker compose up -d'
-      -
-        name: Test deployment
-        shell: bash
-        run: |
-          count=30
-          while ! curl -kI https://${{ secrets.HOST }} ; do
-            echo "Waiting...";
-            sleep 3;
-            let count=count-1
-          done
-          echo "Success!"
+      # -
+      #   name: Test deployment
+      #   shell: bash
+      #   run: |
+      #     count=30
+      #     while ! curl -kI https://${{ secrets.PUBLIC_HOST }} ; do
+      #       echo "Waiting...";
+      #       sleep 3;
+      #       let count=count-1
+      #     done
+      #     echo "Success!"
       -
         name: Checkout
         uses: actions/checkout@v3

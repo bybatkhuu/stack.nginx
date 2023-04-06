@@ -155,7 +155,29 @@ nano docker-compose.override.yml
 docker compose config
 ```
 
-### 4. Run docker compose
+### 4. Configure NGINX
+
+**TIP:** Skip this step, if you've already configured NGINX.
+
+```sh
+# Choose template file to use:
+export _TEMPLATE_BASENAME=[_TEMPLATE_BASENAME]
+# For example:
+export _TEMPLATE_BASENAME=example.com.https.lets
+
+# Set custom template file name:
+export _CUSTOM_BASENAME=[_CUSTOM_BASENAME]
+# For example:
+export _CUSTOM_BASENAME=example.com
+
+# Copy template file into storage directory:
+cp -v ./templates/nginx.conf/${_TEMPLATE_BASENAME}.conf.template ./volumes/storage/nginx/configs/templates/${_CUSTOM_BASENAME}.conf.template
+
+# Edit template file to fit in your nginx configuration:
+nano ./volumes/storage/nginx/configs/templates/${_CUSTOM_BASENAME}.conf.template
+```
+
+### 5. Run docker compose
 
 ```sh
 ./certbot-compose.sh start -l
@@ -164,7 +186,7 @@ docker compose config
 docker compose up -d && docker compose logs -f --tail 100
 ```
 
-### 5. Check certificates
+### 6. Check certificates
 
 ```sh
 ./certbot-compose.sh certs
@@ -179,7 +201,7 @@ ls -alhF ./volumes/storage/nginx/ssl
 tree -alFC --dirsfirst -L 5 ./volumes/storage/nginx/ssl
 ```
 
-### 6. Stop docker compose
+### 7. Stop docker compose
 
 ```sh
 ./certbot-compose.sh stop
