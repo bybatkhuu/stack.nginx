@@ -33,7 +33,6 @@ server {
 	ssl_certificate_key /etc/nginx/ssl/example.com/key.pem;
 
 	## Security headers:
-	add_header Expect-CT "max-age=604800, report-uri='https://example.com/report'" always;
 	add_header Access-Control-Allow-Origin "https://example.com" always;
 	include /etc/nginx/conf.d/security-headers.conf;
 
@@ -64,9 +63,9 @@ server {
 	server_name api.example.com;
 
 	## Logging:
-	access_log /dev/stdout combined;
-	access_log /var/log/nginx/api.example.com.access.${DOLLAR}map_date_now.log combined;
-	access_log /var/log/nginx/api.example.com.access.json.${DOLLAR}map_date_now.log json_combined;
+	access_log /dev/stdout combined if=${DOLLAR}loggable;
+	access_log /var/log/nginx/api.example.com.access.${DOLLAR}map_date_now.log combined if=${DOLLAR}loggable;
+	access_log /var/log/nginx/api.example.com.access.json.${DOLLAR}map_date_now.log json_combined if=${DOLLAR}loggable;
 
 	## Restrict methods:
 	if (${DOLLAR}request_method !~ ^(GET|POST|PUT|PATCH|DELETE|HEAD|CONNECT|OPTIONS)${DOLLAR}) {
@@ -80,14 +79,8 @@ server {
 	ssl_certificate_key /etc/nginx/ssl/example.com/key.pem;
 
 	## Security headers:
-	add_header Expect-CT "max-age=604800, report-uri='https://example.com/report'" always;
-	# add_header Access-Control-Allow-Origin "https://example.com" always;
 	# include /etc/nginx/conf.d/security-headers.conf;
 	include /etc/nginx/conf.d/api-headers.conf;
-
-	## Additional configs:
-	include /etc/nginx/conf.d/general.conf;
-	include /etc/nginx/conf.d/well-known.conf;
 
 	## Reverse proxy:
 	location / {
