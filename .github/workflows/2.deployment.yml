@@ -39,7 +39,7 @@ jobs:
           END
       -
         name: Stop services
-        run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && docker compose down'
+        run: sleep 3 && ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && docker compose down'
       -
         name: Backup
         run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && ./scripts/backup.sh'
