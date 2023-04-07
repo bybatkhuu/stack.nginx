@@ -3,7 +3,7 @@ set -euo pipefail
 
 
 # Date format
-_DATE_FORMAT="+%Y-%m-%d %H:%M:%S %Z"
+_DATE_FORMAT="+%Y-%m-%d %H:%M:%S %z"
 _BLUE=""
 _GREEN=""
 _YELLOW=""
