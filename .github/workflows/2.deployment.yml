@@ -38,6 +38,17 @@ jobs:
             StrictHostKeyChecking no
           END
       -
+        name: Check connection
+        shell: bash
+        run: |
+          count=10
+          while ! ping -c 1 ${{ secrets.ZEROTIER_HOST }} ; do
+            echo "Waiting to ping...";
+            sleep 1;
+            let count=count-1
+          done
+          echo "OK: Connection established!"
+      -
         name: Stop services
         run: sleep 3 && ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && docker compose down'
       -
@@ -54,13 +65,13 @@ jobs:
       #   name: Test deployment
       #   shell: bash
       #   run: |
-      #     count=30
+      #     count=120
       #     while ! curl -kI https://${{ secrets.PUBLIC_HOST }} ; do
-      #       echo "Waiting...";
-      #       sleep 3;
+      #       echo "Waiting to curl...";
+      #       sleep 1;
       #       let count=count-1
       #     done
-      #     echo "Success!"
+      #     echo "OK: Deployment successful!"
       -
         name: Checkout
         uses: actions/checkout@v3
