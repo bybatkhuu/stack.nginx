@@ -159,6 +159,16 @@ docker compose config
 
 **TIP:** Skip this step, if you've already configured NGINX.
 
+**IMPORTANT:** Please, check nginx configuration and best practices:
+
+- <https://www.udemy.com/course/nginx-fundamentals>
+- <https://www.baeldung.com/linux/nginx-config-environment-variables>
+- <https://www.youtube.com/watch?v=pkHQCPXaimU>
+- <https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes>
+- <https://www.nginx.com/nginx-wiki/build/dirhtml/start/topics/tutorials/config_pitfalls>
+- <https://www.digitalocean.com/community/tools/nginx>
+- <https://github.com/fcambus/nginx-resources>
+
 ```sh
 # Choose template file to use:
 export _TEMPLATE_BASENAME=[_TEMPLATE_BASENAME]
@@ -315,6 +325,7 @@ For example as in **`docker-compose.override.yml`** file:
 - NGINX Proxy Manager - <https://nginxproxymanager.com>
 - NGINX fundamental course - <https://www.udemy.com/course/nginx-fundamentals>
 - NGINX resources - <https://github.com/fcambus/nginx-resources>
+- NGINX config environment variables - <https://www.baeldung.com/linux/nginx-config-environment-variables>
 - Certbot - <https://certbot.eff.org>
 - Certbot documentation - <https://eff-certbot.readthedocs.io/en/stable>
 - Let's Encrypt - <https://letsencrypt.org>
