@@ -36,7 +36,6 @@ services:
     # env_file:
     #   - .env
     volumes:
-      - "./volumes/storage/nginx/configs/sites-enabled:/etc/nginx/sites-enabled"
       - "./volumes/.vscode-server:/root/.vscode-server"
     # deploy:
     #   replicas: 0

@@ -32,8 +32,6 @@ version: "3.8"
 #       - NGINX_BASIC_AUTH_PASS=${NGINX_BASIC_AUTH_PASS}
 #     env_file:
 #       - .env
-#     volumes:
-#       - "./volumes/storage/nginx/configs/sites-enabled:/etc/nginx/sites-enabled"
 #     deploy:
 #       replicas: 0
 #       resources:
