@@ -17,8 +17,8 @@ server {
 	server_name example.com www.example.com;
 
 	## Logging:
-	access_log /dev/stdout combined;
-	access_log /var/log/nginx/example.com.access.${DOLLAR}map_date_now.log combined;
+	access_log /dev/stdout realip_combined;
+	access_log /var/log/nginx/example.com.access.${DOLLAR}map_date_now.log realip_combined;
 	access_log /var/log/nginx/example.com.access.json.${DOLLAR}map_date_now.log json_combined;
 
 	## Restrict methods:
@@ -63,8 +63,8 @@ server {
 	server_name api.example.com;
 
 	## Logging:
-	access_log /dev/stdout combined if=${DOLLAR}loggable;
-	access_log /var/log/nginx/api.example.com.access.${DOLLAR}map_date_now.log combined if=${DOLLAR}loggable;
+	access_log /dev/stdout realip_combined if=${DOLLAR}loggable;
+	access_log /var/log/nginx/api.example.com.access.${DOLLAR}map_date_now.log realip_combined if=${DOLLAR}loggable;
 	access_log /var/log/nginx/api.example.com.access.json.${DOLLAR}map_date_now.log json_combined if=${DOLLAR}loggable;
 
 	## Restrict methods:

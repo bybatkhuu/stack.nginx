@@ -13,7 +13,8 @@
 	"editor.insertSpaces": false,
 	"[markdown]":
 	{
-		"editor.insertSpaces": true
+		"editor.insertSpaces": true,
+		"files.trimTrailingWhitespace": false
 	},
 	"[python]":
 	{
