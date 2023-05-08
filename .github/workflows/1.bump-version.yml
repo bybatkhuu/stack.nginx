@@ -31,4 +31,4 @@ jobs:
           git config user.email "github-actions@github.com"
           export VERSION_FILENAME=version.txt
           ./scripts/bump-version.sh ${{ inputs.bump_type }}
-          gh workflow run 2.deployment.yml -r v$(cat ${VERSION_FILENAME})
+          gh workflow run 2.create-release.yml -r v$(cat ${VERSION_FILENAME})

@@ -139,22 +139,13 @@ _doUpdate()
 
 	# _doStart "${@:-}" || exit 2
 }
-
-_doClean()
-{
-	if docker compose ps | grep 'Up' > /dev/null 2>&1; then
-		_doStop
-	fi
-
-	rm -rfv ./volumes/storage/nginx/logs/* ./volumes/storage/certbot/logs/* ./volumes/storage/nginx/ssl/* || exit 2
-}
 ## --- Functions --- ##
 
 
 ## --- Menu arguments --- ##
 _exitOnWrongParams()
 {
-	echoInfo "USAGE: ${0} validate | start | stop | restart | logs | list | ps | stats | exec | certs | reload | enter | images | update | clean"
+	echoInfo "USAGE: ${0} validate | start | stop | restart | logs | list | ps | stats | exec | certs | reload | enter | images | update"
 	exit 1
 }
 
@@ -166,7 +157,7 @@ main()
 	fi
 
 	case ${1} in
-		validate | config)
+		validate | valid | config)
 			shift
 			_doValidate;;
 		start | run)
@@ -207,9 +198,6 @@ main()
 		update)
 			shift
 			_doUpdate "${@:-}";;
-		clean | clear)
-			shift
-			_doClean;;
 		*)
 			echoError "Failed to parsing input: ${*}"
 			_exitOnWrongParams;;
