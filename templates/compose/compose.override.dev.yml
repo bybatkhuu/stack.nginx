@@ -7,7 +7,7 @@ services:
       # - "./volumes/storage/certbot/secrets:/root/.secrets/certbot"
       # - "./volumes/storage/certbot/secrets:/root/.aws"
       - "./volumes/src/sidecar.certbot/scripts/docker/certbot-permissions.sh:/usr/local/bin/certbot-permissions.sh"
-      - "./volumes/src/sidecar.certbot/scripts/docker/certbot-deploy.sh:/usr/local/bin/certbot-deploy.sh"
+      - "./volumes/src/sidecar.certbot/scripts/docker/certbot-deploy-hook.sh:/usr/local/bin/certbot-deploy-hook.sh"
       - "./volumes/src/sidecar.certbot/scripts/docker/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
       - "./volumes/.vscode-server:/root/.vscode-server"
     # deploy:
