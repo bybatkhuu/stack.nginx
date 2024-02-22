@@ -1,5 +1,9 @@
 # NGINX Stack
 
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bybatkhuu/stack.nginx/2.build-publish.yml?logo=GitHub)](https://github.com/bybatkhuu/stack.nginx/actions/workflows/2.build-publish.yml)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/bybatkhuu/stack.nginx?logo=GitHub)](https://github.com/bybatkhuu/stack.nginx/releases)
+
 This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
 
 ## Features
@@ -41,7 +45,7 @@ This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
 
 ### 1. Prerequisites
 
-- **Server** with **public IP address**
+- Prepare **server/PC** with **public IP address**
 - Buy or register **domain name**
 - **[RECOMMENDED]** DNS provider **API token/credentials** (required for **DNS challenges** and **wildcard subdomains**):
     - Cloudflare - <https://dash.cloudflare.com/profile/api-tokens>
@@ -49,12 +53,12 @@ This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
     - GoDaddy - <https://developer.godaddy.com/keys>
     - AWS Route53 - <https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys>
     - Google Cloud DNS - <https://cloud.google.com/docs/authentication/getting-started>
-- Install **docker** and **docker-compose** in **server** - <https://docs.docker.com/engine/install>
+- Install [**docker**](https://docs.docker.com/engine/install) and [**docker compose**](https://docs.docker.com/compose/install) in **server**
 
-For **development**:
+For **DEVELOPMENT**:
 
-- Install **git** - <https://git-scm.com/downloads>
-- Setup an **SSH key** - <https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh>
+- Install [**git**](https://git-scm.com/downloads)
+- Setup an [**SSH key**](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh) ([video tutorial](https://www.youtube.com/watch?v=snCP3c7wXw0))
 
 ### 2. Download or clone the repository
 
@@ -66,58 +70,37 @@ mkdir -pv ~/workspaces/projects
 
 # Enter into projects directory:
 cd ~/workspaces/projects
-
-# Set repository owner:
-export _REPO_OWNER=[REPO_OWNER]
-# For example:
-export _REPO_OWNER=username
 ```
 
 **2.2.** Follow one of the below options **[A]**, **[B]** or **[C]**:
 
-**A.** Download source code from releases page:
-
-- Releases - <https://github.com/[REPO_OWNER]/stack.nginx/releases>
+**A.** Clone the repository (for **LOCAL**, **TEST**, **STAGING** or **PRODUCTION** environments):
 
 ```sh
-# Set to downloaded version:
-export _VERSION=[VERSION]
-# For example:
-export _VERSION=1.0.0
-
-# Move downloaded archive file to current projects directory:
-mv -v ~/Downloads/stack.nginx-${_VERSION}.zip .
-
-# Extract downloaded archive file:
-unzip stack.nginx-${_VERSION}.zip
-
-# Remove downloaded archive file:
-rm -v stack.nginx-${_VERSION}.zip
-
-# Rename extracted directory into project name:
-mv -v stack.nginx-${_VERSION} stack.nginx && cd stack.nginx
+git https://github.com/bybatkhuu/stack.nginx.git && \
+    cd stack.nginx
 ```
 
-**B.** Or clone the repository (git + ssh key):
+**B.** Clone with all submodules (for **DEVELOPMENT** environments - **Gigachad** developers):
 
 ```sh
-git clone git@github.com:${_REPO_OWNER}/stack.nginx.git && cd stack.nginx
+git clone --recursive https://github.com/bybatkhuu/stack.nginx.git && \
+    cd stack.nginx && \
+    git submodule update --init --recursive && \
+    git submodule foreach --recursive git checkout main
 ```
 
-**C.** **[For development]** Or clone with all submodules (git + ssh key):
-
-```sh
-git clone --recursive git@github.com:${_REPO_OWNER}/stack.nginx.git && cd stack.nginx && \
-    git submodule update --init --recursive && git submodule foreach --recursive git checkout main
-```
+**C.** Download source code from [releases](https://github.com/bybatkhuu/stack.nginx/releases) page.
 
 ### 3. Configure environment
 
-**TIP:** Skip this step, if you've already configured environment.
+> [!TIP]
+> Skip this step, if you've already configured environment.
 
 **3.1.** Configure **`.env`** file:
 
-**IMPORTANT:** Please, check **[environment variables](#environment-variables)**!
+> [!IMPORTANT]
+> Please, check **[environment variables](#environment-variables)**!
 
 ```sh
 # Copy .env.example file into .env file:
@@ -127,39 +110,41 @@ cp -v .env.example .env
 nano .env
 ```
 
-**3.2.** Configure **`docker-compose.override.yml`** file:
+**3.2.** Configure **`compose.override.yml`** file:
 
-**IMPORTANT:** Please, check **[arguments](#arguments)**!
+> [!IMPORTANT]
+> Please, check **[arguments](#arguments)**!
 
 ```sh
-# Set environment:
-export _ENV=[ENV]
-# For example for development environment:
-export _ENV=dev
+# Copy 'compose.override.[ENV].yml' file to 'compose.override.yml' file:
+cp -v ./templates/compose/compose.override.[ENV].yml ./compose.override.yml
+# For example, DEVELOPMENT environment:
+cp -v ./templates/compose/compose.override.dev.yml ./compose.override.yml
+# For example, STATGING or PRODUCTION environment:
+cp -v ./templates/compose/compose.override.prod.yml ./compose.override.yml
 
-# Copy docker-compose.override.[ENV].yml into docker-compose.override.yml file:
-cp -v ./templates/docker-compose/docker-compose.override.${_ENV}.yml docker-compose.override.yml
-
-# Edit docker-compose.override.yml file to fit in your environment:
-nano docker-compose.override.yml
+# Edit 'compose.override.yml' file to fit in your environment:
+nano ./compose.override.yml
 ```
 
 **3.3.** Validate docker compose configuration:
 
-**NOTICE:** If you get an error or warning, check your configuration files (**`.env`** or **`docker-compose.override.yml`**).
+> [!WARNING]
+> If you get an error or warning, check your configuration files (**`.env`** or **`compose.override.yml`**).
 
 ```sh
-./certbot-compose.sh validate
-
+./compose.sh validate
 # Or:
 docker compose config
 ```
 
 ### 4. Configure NGINX
 
-**TIP:** Skip this step, if you've already configured NGINX.
+> [!TIP]
+> Skip this step, if you've already configured NGINX.
 
-**IMPORTANT:** Please, check nginx configuration and best practices:
+> [!IMPORTANT]
+> Please, check nginx configuration and best practices:
 
 - <https://www.udemy.com/course/nginx-fundamentals>
 - <https://www.baeldung.com/linux/nginx-config-environment-variables>
@@ -169,44 +154,50 @@ docker compose config
 - <https://www.digitalocean.com/community/tools/nginx>
 - <https://github.com/fcambus/nginx-resources>
 
+Use template files to configure NGINX:
+
 ```sh
-# Choose template file to use:
-export _TEMPLATE_BASENAME=[_TEMPLATE_BASENAME]
-# For example:
-export _TEMPLATE_BASENAME=example.com.https.lets
-
-# Set custom template file name:
-export _CUSTOM_BASENAME=[_CUSTOM_BASENAME]
-# For example:
-export _CUSTOM_BASENAME=example.com
-
 # Copy template file into storage directory:
-cp -v ./templates/nginx.conf/${_TEMPLATE_BASENAME}.conf.template ./volumes/storage/nginx/configs/templates/${_CUSTOM_BASENAME}.conf.template
+cp -v ./templates/nginx.conf/[TEMPLATE_BASENAME].conf.template ./volumes/storage/nginx/configs/templates/[CUSTOM_BASENAME].conf.template
+# For example, Let's Encrypt HTTPS configuration for example.com domain:
+cp -v ./templates/nginx.conf/example.com_https.lets.conf.template ./volumes/storage/nginx/configs/templates/example.com.conf.template
 
 # Edit template file to fit in your nginx configuration:
-nano ./volumes/storage/nginx/configs/templates/${_CUSTOM_BASENAME}.conf.template
+nano ./volumes/storage/nginx/configs/templates/[CUSTOM_BASENAME].conf.template
+# For example:
+nano ./volumes/storage/nginx/configs/templates/example.com.conf.template
 ```
 
 ### 5. Run docker compose
 
-```sh
-./certbot-compose.sh start -l
+> [!CAUTION]
+> If **container names** are conflicting, you should change **project directory name (stack.nginx)** from [**2.2. step**](#2-download-or-clone-the-repository).
 
+```sh
+./compose.sh start -l
 # Or:
-docker compose up -d && docker compose logs -f --tail 100
+docker compose up -d --remove-orphans --force-recreate && \
+    docker compose logs -f --tail 100
 ```
 
-### 6. Check certificates
+### 6. Check service is running
+
+Check the service is running:
 
 ```sh
-./certbot-compose.sh certs
+./compose.sh list
+# Or:
+docker compose ps
+```
 
+Check certificates:
+
+```sh
+./compose.sh certs
 # Or check certificates in container:
 docker compose exec certbot certbot certificates
-
 # Or check certificates in host:
 ls -alhF ./volumes/storage/nginx/ssl
-
 # Or check certificates in host with tree:
 tree -alFC --dirsfirst -L 5 ./volumes/storage/nginx/ssl
 ```
@@ -214,10 +205,9 @@ tree -alFC --dirsfirst -L 5 ./volumes/storage/nginx/ssl
 ### 7. Stop docker compose
 
 ```sh
-./certbot-compose.sh stop
-
+./compose.sh stop
 # Or:
-docker compose down
+docker compose down --remove-orphans
 ```
 
 :thumbsup: :sparkles:
@@ -231,19 +221,15 @@ You can use the following environment variables to configure:
 [**`.env.example`**](.env.example)
 
 ```sh
-# Docker image namespace:
-IMG_NAMESCAPE=username
-
-## Certbot:
+## --- CERTBOT configs --- ##
 CERTBOT_EMAIL=user@email.com
 CERTBOT_DOMAINS="example.com,www.example.com"
 CERTBOT_DNS_TIMEOUT=30
 
-## NGINX:
-# NGINX_BASIC_AUTH_USER=nginx_admin
-# NGINX_BASIC_AUTH_PASS="admin_password"
-# NGINX_HTTP_PORT=80
-# NGINX_HTTPS_PORT=443
+
+## --- NGINX configs --- ##
+NGINX_BASIC_AUTH_USER=nginx_admin
+NGINX_BASIC_AUTH_PASS="NGINX_ADMIN_PASSWORD123" # !!! CHANGE THIS TO RANDOM PASSWORD !!!
 ```
 
 ## Arguments
@@ -262,7 +248,7 @@ You can use the following arguments to configure:
     Run only bash shell.
 ```
 
-For example as in [**`docker-compose.override.yml`**](templates/docker-compose/docker-compose.override.dev.yml) file:
+For example as in [**`compose.override.yml`**](templates/compose/compose.override.dev.yml) file:
 
 ```yml
     command: ["--https=self"]
@@ -288,7 +274,7 @@ For example as in [**`docker-compose.override.yml`**](templates/docker-compose/d
     Run only bash shell.
 ```
 
-For example as in [**`docker-compose.override.yml`**](templates/docker-compose/docker-compose.override.dev.yml) file:
+For example as in [**`compose.override.yml`**](templates/compose/compose.override.dev.yml) file:
 
 ```yml
     command: ["--server=production"]
@@ -304,7 +290,6 @@ For example as in [**`docker-compose.override.yml`**](templates/docker-compose/d
 
 ## Roadmap
 
-- Add GitHub action for auto-update CHANGELOG.md file.
 - Add more DNS providers.
 - Add more documentation.
 
