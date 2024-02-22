@@ -1,7 +1,7 @@
 # NGINX Stack
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bybatkhuu/stack.nginx/2.build-publish.yml?logo=GitHub)](https://github.com/bybatkhuu/stack.nginx/actions/workflows/2.build-publish.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bybatkhuu/stack.nginx/2.create-release.yml?logo=GitHub)](https://github.com/bybatkhuu/stack.nginx/actions/workflows/2.create-release.yml)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/bybatkhuu/stack.nginx?logo=GitHub)](https://github.com/bybatkhuu/stack.nginx/releases)
 
 This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
