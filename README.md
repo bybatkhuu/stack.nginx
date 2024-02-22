@@ -182,8 +182,6 @@ docker compose up -d --remove-orphans --force-recreate && \
 
 ### 6. Check service is running
 
-Check the service is running:
-
 ```sh
 ./compose.sh list
 # Or:
