@@ -1,8 +1,6 @@
-version: "3.8"
-
 services:
   certbot:
-    image: ${IMG_NAMESCAPE}/certbot:1.3.0-230407
+    image: ${IMG_REGISTRY:-bybatkhuu}/certbot:2.0.0-240222
     restart: unless-stopped
     environment:
       - TERM=${TERM:-xterm}
@@ -11,14 +9,14 @@ services:
       - CERTBOT_DOMAINS=${CERTBOT_DOMAINS}
       - CERTBOT_DNS_TIMEOUT=${CERTBOT_DNS_TIMEOUT:-30}
     volumes:
-      - "./volumes/storage/nginx/ssl:/etc/letsencrypt"
-      - "./volumes/storage/nginx/www/.well-known/acme-challenge:/var/www/.well-known/acme-challenge"
       - "./volumes/storage/certbot/logs:/var/log/letsencrypt"
+      - "./volumes/storage/nginx/www/.well-known/acme-challenge:/var/www/.well-known/acme-challenge"
+      - "./volumes/storage/nginx/ssl:/etc/letsencrypt"
     network_mode: host
     tty: true
 
   nginx:
-    image: ${IMG_NAMESCAPE}/nginx:1.3.0-230504
+    image: ${IMG_REGISTRY:-bybatkhuu}/nginx:2.0.1-240222
     depends_on:
       - certbot
     restart: unless-stopped
@@ -26,11 +24,11 @@ services:
       - TERM=${TERM:-xterm}
       - TZ=${TZ:-Asia/Seoul}
     volumes:
-      - "./volumes/storage/nginx/configs/sites-enabled:/etc/nginx/sites-enabled"
-      - "./volumes/storage/nginx/configs/templates:/etc/nginx/templates"
+      - "./volumes/storage/nginx/logs:/var/log/nginx"
       - "./volumes/storage/nginx/www:/var/www"
       - "./volumes/storage/nginx/ssl:/etc/nginx/ssl"
-      - "./volumes/storage/nginx/logs:/var/log/nginx"
+      - "./volumes/storage/nginx/configs/sites-enabled:/etc/nginx/sites-enabled"
+      - "./volumes/storage/nginx/configs/templates:/etc/nginx/templates"
     network_mode: host
     tty: true
     command: ["--https=lets"]

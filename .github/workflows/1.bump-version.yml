@@ -15,20 +15,15 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: write
-      actions: write
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      -
-        name: Bump version
+      - name: Bump version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          export VERSION_FILENAME=version.txt
-          ./scripts/bump-version.sh ${{ inputs.bump_type }}
-          gh workflow run 2.create-release.yml -r v$(cat ${VERSION_FILENAME})
+          ./scripts/bump-version.sh -b=${{ inputs.bump_type }} -c -t -p

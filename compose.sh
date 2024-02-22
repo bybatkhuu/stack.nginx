@@ -9,22 +9,30 @@ cd "${_PROJECT_DIR}" || exit 2
 
 # Loading base script:
 # shellcheck disable=SC1091
-source "${_PROJECT_DIR}/scripts/base.sh"
+source ./scripts/base.sh
 
 exitIfNoDocker
-exitIfNotExists ".env"
+
+# Loading .env file (if exists):
+if [ -f ".env" ]; then
+	# shellcheck disable=SC1091
+	source .env
+fi
 ## --- Base --- ##
 
 
 ## --- Variables --- ##
-# Extending timeout of docker compose logs:
-export COMPOSE_HTTP_TIMEOUT=43200
-
 _DEFAULT_SERVICE="nginx"
 ## --- Variables --- ##
 
 
 ## --- Functions --- ##
+_doBuild()
+{
+	./scripts/build.sh || exit 2
+	# docker compose build || exit 2
+}
+
 _doValidate()
 {
 	docker compose config || exit 2
@@ -35,18 +43,18 @@ _doStart()
 	if [ "${1:-}" == "-l" ]; then
 		shift
 		# shellcheck disable=SC2068
-		docker compose up -d ${@:-} || exit 2
+		docker compose up -d --remove-orphans --force-recreate ${@:-} || exit 2
 		_doLogs "${@:-}"
 	else
 		# shellcheck disable=SC2068
-		docker compose up -d ${@:-} || exit 2
+		docker compose up -d --remove-orphans --force-recreate ${@:-} || exit 2
 	fi
 }
 
 _doStop()
 {
 	if [ -z "${1:-}" ]; then
-		docker compose down || exit 2
+		docker compose down --remove-orphans || exit 2
 	else
 		# shellcheck disable=SC2068
 		docker compose rm -sfv ${@:-} || exit 2
@@ -55,8 +63,14 @@ _doStop()
 
 _doRestart()
 {
-	_doStop "${@:-}" || exit 2
-	_doStart "${@:-}" || exit 2
+	if [ "${1:-}" == "-l" ]; then
+		shift
+		_doStop "${@:-}" || exit 2
+		_doStart -l "${@:-}" || exit 2
+	else
+		_doStop "${@:-}" || exit 2
+		_doStart "${@:-}" || exit 2
+	fi
 	# docker compose restart ${@:-} || exit 2
 }
 
@@ -88,11 +102,6 @@ _doStats()
 	docker stats $(docker compose ps -q) || exit 2
 }
 
-_doCerts()
-{
-	docker compose exec certbot certbot certificates || exit 2
-}
-
 _doExec()
 {
 	if [ -z "${1:-}" ]; then
@@ -102,6 +111,11 @@ _doExec()
 
 	# shellcheck disable=SC2068
 	docker compose exec "${_DEFAULT_SERVICE}" ${@} || exit 2
+}
+
+_doCerts()
+{
+	docker compose exec certbot certbot certificates || exit 2
 }
 
 _doReload()
@@ -126,6 +140,12 @@ _doImages()
 	docker compose images ${@:-} || exit 2
 }
 
+_doClean()
+{
+	# shellcheck disable=SC2068
+	docker compose down -v --remove-orphans ${@:-} || exit 2
+}
+
 _doUpdate()
 {
 	if docker compose ps | grep 'Up' > /dev/null 2>&1; then
@@ -145,7 +165,7 @@ _doUpdate()
 ## --- Menu arguments --- ##
 _exitOnWrongParams()
 {
-	echoInfo "USAGE: ${0} validate | start | stop | restart | logs | list | ps | stats | exec | certs | reload | enter | images | update"
+	echoInfo "USAGE: ${0} build | validate | start | stop | restart | logs | list | ps | stats | exec | certs | reload | enter | images | clean | update"
 	exit 1
 }
 
@@ -157,6 +177,9 @@ main()
 	fi
 
 	case ${1} in
+		build)
+			shift
+			_doBuild;;
 		validate | valid | config)
 			shift
 			_doValidate;;
@@ -195,6 +218,9 @@ main()
 		images)
 			shift
 			_doImages "${@:-}";;
+		clean | clear)
+			shift
+			_doClean "${@:-}";;
 		update)
 			shift
 			_doUpdate "${@:-}";;
