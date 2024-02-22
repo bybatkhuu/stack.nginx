@@ -33,10 +33,12 @@ services:
     image: ${IMG_REGISTRY:-bybatkhuu}/nginx:latest
     # env_file:
     #   - .env
+    # environment:
+    #   - NGINX_BASIC_AUTH_USER=${NGINX_BASIC_AUTH_USER}
+    #   - NGINX_BASIC_AUTH_PASS=${NGINX_BASIC_AUTH_PASS}
     volumes:
-      # - "./volumes/storage/nginx/ssl:/etc/nginx/ssl"
       - "./volumes/src/server.nginx-template/src/configs/nginx.conf:/etc/nginx/nginx.conf"
-      - "./volumes/src/server.nginx-template/scripts/nginx-reload.sh:/usr/local/bin/nginx-reload.sh"
+      - "./volumes/src/server.nginx-template/scripts/docker/nginx-reload.sh:/usr/local/bin/nginx-reload.sh"
       - "./volumes/src/server.nginx-template/scripts/docker/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
       - "./volumes/.vscode-server:/root/.vscode-server"
     # deploy:
