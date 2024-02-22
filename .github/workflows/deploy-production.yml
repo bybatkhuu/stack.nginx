@@ -4,70 +4,63 @@ on:
   push:
     branches:
       - production
-  pull_request:
-    branches:
-      - production
-    types:
-      - closed
+  # pull_request:
+  #   branches:
+  #     - production
+  #   types:
+  #     - closed
 
 jobs:
   deploy_production:
     name: Deploy
     runs-on: ubuntu-22.04
-    if: ${{ github.event_name == 'push' || github.event.pull_request.merged == true }}
+    environment:
+      name: PRODUCTION
     permissions:
       contents: read
-      actions: write
     steps:
-      -
-        name: Configure ZeroTier
+      - name: Configure ZeroTier
         uses: zerotier/github-action@v1.0.1
         with:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_TOKEN }}
-      -
-        name: Configure SSH
+      - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           cat >> ~/.ssh/config <<END
           Host prod_server
-            HostName ${{ secrets.ZEROTIER_HOST }}
-            User ${{ secrets.SSH_USER }}
+            HostName ${{ vars.ZEROTIER_HOST }}
+            User ${{ vars.SSH_USER }}
             IdentityFile ~/.ssh/id_rsa
             StrictHostKeyChecking no
           END
-      -
-        name: Check connection
+      - name: Check connection
         shell: bash
         run: |
-          count=10
-          while ! ping -c 1 ${{ secrets.ZEROTIER_HOST }} ; do
+          count=30
+          while ! ping -c 1 ${{ vars.ZEROTIER_HOST }} ; do
             echo "Waiting to ping...";
             sleep 1;
             let count=count-1
           done
           echo "OK: Connection established!"
-      -
-        name: Stop services
-        run: sleep 3 && ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && docker compose down'
-      -
-        name: Backup
-        run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && ./scripts/backup.sh'
-      -
-        name: Update to latest version
-        run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && git fetch && git reset --hard origin/main && docker compose pull'
-      -
-        name: Start services
+      - name: Stop services
+        run: sleep 3 && ssh SERVER 'cd ${{ vars.PROJECT_DIR }} && docker compose down --remove-orphans'
+      - name: Backup
+        run: ssh SERVER 'cd ${{ vars.PROJECT_DIR }} && echo "${{ secrets.DEPLOY_USER_PASSWORD }}" | sudo -S ./scripts/backup.sh'
+      - name: Update to latest version
+        run: ssh SERVER 'cd ${{ vars.PROJECT_DIR }} && git checkout production && git fetch origin production && git reset --hard origin/production && docker compose pull'
+      - name: Start services
         if: ${{ always() }}
-        run: ssh prod_server 'cd ${{ secrets.PROJECT_DIR }} && docker compose up -d'
+        run: ssh SERVER 'cd ${{ vars.PROJECT_DIR }} && docker compose up -d --remove-orphans --force-recreate'
       # -
       #   name: Test deployment
       #   shell: bash
       #   run: |
       #     count=120
-      #     while ! curl -kI https://${{ secrets.PUBLIC_HOST }} ; do
+      #     while ! curl -kI https://${{ vars.PUBLIC_HOST }} ; do
       #       echo "Waiting to curl...";
       #       sleep 1;
       #       let count=count-1

@@ -1,27 +1,26 @@
 name: 2. Create Release
 
 on:
+  workflow_run:
+    branches:
+      - main
+    workflows: ["1. Bump Version"]
+    types:
+      - completed
   push:
     tags:
       - "v*.*.*-*"
-  pull_request:
-    tags:
-      - "v*.*.*-*"
-  workflow_dispatch:
 
 jobs:
   create_release:
     name: Create Release
     runs-on: ubuntu-22.04
-    if: ${{ github.ref_type == 'tag' }}
     permissions:
       contents: write
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Create release
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create ${GITHUB_REF_NAME} --generate-notes
+        run: gh release create v$(./scripts/get-version.sh) --generate-notes

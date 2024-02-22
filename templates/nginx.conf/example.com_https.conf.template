@@ -85,7 +85,6 @@ server {
 	## Reverse proxy:
 	location / {
 		# rewrite ^/api/(.*)${DOLLAR} /${DOLLAR}1?${DOLLAR}args break;
-		proxy_set_header Host ${DOLLAR}host;
 		include /etc/nginx/conf.d/proxy.conf;
 		proxy_pass http://api-server;
 	}

@@ -1,13 +1,14 @@
-version: "3.8"
-
 services:
   certbot:
-    image: ${IMG_NAMESCAPE}/certbot:latest
+    image: ${IMG_REGISTRY:-bybatkhuu}/certbot:latest
     # env_file:
     #   - .env
     volumes:
       # - "./volumes/storage/certbot/secrets:/root/.secrets/certbot"
       # - "./volumes/storage/certbot/secrets:/root/.aws"
+      - "./volumes/src/sidecar.certbot/scripts/docker/certbot-permissions.sh:/usr/local/bin/certbot-permissions.sh"
+      - "./volumes/src/sidecar.certbot/scripts/docker/certbot-deploy.sh:/usr/local/bin/certbot-deploy.sh"
+      - "./volumes/src/sidecar.certbot/scripts/docker/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
       - "./volumes/.vscode-server:/root/.vscode-server"
     # deploy:
     #   replicas: 0
@@ -17,7 +18,7 @@ services:
     #       memory: 256M
     # network_mode: bridge
     # ports:
-    #   - "80:80"
+    #   - "${CERTBOT_PORT:-80}:80"
     # command: ["--new=webroot"]
     # command: ["--renew=standalone"]
     # command: ["--disable-renew"]
@@ -29,13 +30,14 @@ services:
     # command: ["/bin/bash"]
 
   nginx:
-    image: ${IMG_NAMESCAPE}/nginx:latest
-    # environment:
-    #   - NGINX_BASIC_AUTH_USER=${NGINX_BASIC_AUTH_USER}
-    #   - NGINX_BASIC_AUTH_PASS=${NGINX_BASIC_AUTH_PASS}
+    image: ${IMG_REGISTRY:-bybatkhuu}/nginx:latest
     # env_file:
     #   - .env
     volumes:
+      # - "./volumes/storage/nginx/ssl:/etc/nginx/ssl"
+      - "./volumes/src/server.nginx-template/src/configs/nginx.conf:/etc/nginx/nginx.conf"
+      - "./volumes/src/server.nginx-template/scripts/nginx-reload.sh:/usr/local/bin/nginx-reload.sh"
+      - "./volumes/src/server.nginx-template/scripts/docker/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
       - "./volumes/.vscode-server:/root/.vscode-server"
     # deploy:
     #   replicas: 0
@@ -45,9 +47,16 @@ services:
     #       memory: 1G
     # network_mode: bridge
     # ports:
-    #   - "${NGINX_HTTPS_PORT:-443}:${NGINX_HTTPS_PORT:-443}"
-    #   - "${NGINX_HTTP_PORT:-80}:${NGINX_HTTP_PORT:-80}"
+    #   - "${NGINX_HTTPS_PORT:-443}:443"
+    #   - "${NGINX_HTTP_PORT:-80}:80"
     # command: ["--https=self"]
     # command: ["--https=valid"]
     # command: ["--https=lets"]
     # command: ["/bin/bash"]
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost:${NGINX_HTTP_PORT:-80}"]
+    #   start_period: 15s
+    #   start_interval: 1s
+    #   interval: 5m
+    #   timeout: 5s
+    #   retries: 3
