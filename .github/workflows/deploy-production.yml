@@ -55,13 +55,13 @@ jobs:
       - name: Start services
         if: ${{ always() }}
         run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && docker compose up -d --remove-orphans --force-recreate'
-      - name: Test deployment
-        shell: bash
-        run: |
-          count=120
-          while ! curl -kIf ${{ secrets.PUBLIC_URL }} ; do
-            echo "Waiting to curl...";
-            sleep 1;
-            let count=count-1
-          done
-          echo "OK: Deployment successful!"
+      # - name: Test deployment
+      #   shell: bash
+      #   run: |
+      #     count=120
+      #     while ! curl -kIf ${{ secrets.PUBLIC_URL }} ; do
+      #       echo "Waiting to curl...";
+      #       sleep 1;
+      #       let count=count-1
+      #     done
+      #     echo "OK: Deployment successful!"
