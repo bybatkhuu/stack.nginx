@@ -27,12 +27,12 @@ jobs:
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           cat >> ~/.ssh/config <<END
-          Host prod_server
-            HostName ${{ vars.ZEROTIER_HOST }}
-            User ${{ vars.SSH_USER }}
+          Host SERVER
+            HostName ${{ secrets.ZEROTIER_HOST }}
+            User ${{ secrets.DEPLOY_SSH_USER }}
             IdentityFile ~/.ssh/id_rsa
             StrictHostKeyChecking no
           END
@@ -40,27 +40,27 @@ jobs:
         shell: bash
         run: |
           count=30
-          while ! ping -c 1 ${{ vars.ZEROTIER_HOST }} ; do
+          while ! ping -c 1 ${{ secrets.ZEROTIER_HOST }} ; do
             echo "Waiting to ping...";
             sleep 1;
             let count=count-1
           done
           echo "OK: Connection established!"
       - name: Stop services
-        run: sleep 3 && ssh SERVER 'cd ${{ vars.PROJECT_DIR }} && docker compose down --remove-orphans'
+        run: sleep 3 && ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && docker compose down --remove-orphans'
       - name: Backup
-        run: ssh SERVER 'cd ${{ vars.PROJECT_DIR }} && echo "${{ secrets.DEPLOY_USER_PASSWORD }}" | sudo -S ./scripts/backup.sh'
+        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && echo "${{ secrets.DEPLOY_USER_PASSWORD }}" | sudo -S ./scripts/backup.sh'
       - name: Update to latest version
-        run: ssh SERVER 'cd ${{ vars.PROJECT_DIR }} && git checkout production && git fetch origin production && git reset --hard origin/production && docker compose pull'
+        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && git checkout production && git fetch origin production && git reset --hard origin/production && docker compose pull'
       - name: Start services
         if: ${{ always() }}
-        run: ssh SERVER 'cd ${{ vars.PROJECT_DIR }} && docker compose up -d --remove-orphans --force-recreate'
+        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && docker compose up -d --remove-orphans --force-recreate'
       # -
       #   name: Test deployment
       #   shell: bash
       #   run: |
       #     count=120
-      #     while ! curl -kI https://${{ vars.PUBLIC_HOST }} ; do
+      #     while ! curl -kI https://${{ secrets.PUBLIC_HOST }} ; do
       #       echo "Waiting to curl...";
       #       sleep 1;
       #       let count=count-1
