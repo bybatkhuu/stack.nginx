@@ -10,25 +10,20 @@ upstream api-server {
 }
 
 
-## HTTPS:
+## HTTP:
 server {
-	listen 443 ssl http2;
-	listen [::]:443 ssl http2;
+	listen 80;
+	listen [::]:80;
 
 	## Logging:
-	access_log /dev/stdout realip_combined;
-	access_log /var/log/nginx/access.${DOLLAR}map_date_now.log realip_combined;
-	access_log /var/log/nginx/access.json.${DOLLAR}map_date_now.log json_combined;
+	access_log /dev/stdout realip_combined if=${DOLLAR}loggable;
+	access_log /var/log/nginx/access.${DOLLAR}map_date_now.log realip_combined if=${DOLLAR}loggable;
+	access_log /var/log/nginx/access.json.${DOLLAR}map_date_now.log json_combined if=${DOLLAR}loggable;
 
 	## Restrict methods:
-	if (${DOLLAR}request_method !~ ^(GET|POST|PUT|PATCH|DELETE|HEAD|CONNECT|OPTIONS)${DOLLAR}) {
+	if (${DOLLAR}request_method ~ ^(TRACE)${DOLLAR}) {
 		return '405';
 	}
-
-	## SSL:
-	include /etc/nginx/conf.d/ssl.conf;
-	ssl_certificate /etc/nginx/ssl/self.crt;
-	ssl_certificate_key /etc/nginx/ssl/self.key;
 
 	## Security headers:
 	include /etc/nginx/conf.d/security-headers.conf;
@@ -52,20 +47,14 @@ server {
 
 	location ^~ /api {
 		rewrite ^/api/(.*)${DOLLAR} /${DOLLAR}1?${DOLLAR}args break;
+
+		## Cloudflare headers:
+		# include /etc/nginx/conf.d/cloudflare/proxy.conf;
+
 		include /etc/nginx/conf.d/proxy.conf;
 		include /etc/nginx/conf.d/api-headers.conf;
 		proxy_pass http://api-server;
 	}
 
 	# include /etc/nginx/conf.d/status.conf;
-}
-
-## HTTP redirect:
-server {
-	listen 80;
-	listen [::]:80;
-
-	location / {
-		return 301 https://${DOLLAR}host${DOLLAR}request_uri;
-	}
 }
