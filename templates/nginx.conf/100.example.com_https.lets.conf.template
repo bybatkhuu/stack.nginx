@@ -36,6 +36,7 @@ server {
 	## Security headers:
 	add_header Access-Control-Allow-Origin "https://example.com" always;
 	include /etc/nginx/conf.d/security-headers.conf;
+	include /etc/nginx/conf.d/strict-headers.conf;
 
 	## Additional configs:
 	include /etc/nginx/conf.d/general.conf;
@@ -91,6 +92,7 @@ server {
 	location / {
 		# rewrite ^/api/(.*)${DOLLAR} /${DOLLAR}1?${DOLLAR}args break;
 		include /etc/nginx/conf.d/proxy.conf;
+		include /etc/nginx/conf.d/proxy-timeout.conf;
 		proxy_pass http://api-server;
 	}
 }
