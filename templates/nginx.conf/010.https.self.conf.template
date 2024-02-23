@@ -32,7 +32,6 @@ server {
 
 	## Security headers:
 	include /etc/nginx/conf.d/security-headers.conf;
-	include /etc/nginx/conf.d/strict-headers.conf;
 
 	## Additional configs:
 	include /etc/nginx/conf.d/general.conf;
@@ -57,9 +56,11 @@ server {
 		## Cloudflare headers:
 		# include /etc/nginx/conf.d/cloudflare/proxy.conf;
 
+		## Proxy headers:
 		include /etc/nginx/conf.d/proxy.conf;
 		include /etc/nginx/conf.d/proxy-timeout.conf;
 		include /etc/nginx/conf.d/api-headers.conf;
+
 		proxy_pass http://api-server;
 	}
 

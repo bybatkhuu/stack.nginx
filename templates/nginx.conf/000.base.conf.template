@@ -9,7 +9,7 @@
 # 	listen 192.168.0.1:80;
 
 # 	## Nginx stats (basic auth):
-# 	location = /basic-status {
+# 	location = /status {
 # 		auth_basic "Closed site";
 # 		auth_basic_user_file /etc/nginx/ssl/.htpasswd;
 

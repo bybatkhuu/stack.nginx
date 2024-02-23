@@ -16,7 +16,7 @@ services:
     tty: true
 
   nginx:
-    image: ${IMG_REGISTRY:-bybatkhuu}/nginx:2.0.2-240223
+    image: ${IMG_REGISTRY:-bybatkhuu}/nginx:2.0.3-240223
     depends_on:
       - certbot
     restart: unless-stopped
