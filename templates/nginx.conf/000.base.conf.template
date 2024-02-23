@@ -1,0 +1,21 @@
+# allow 192.168.0.0/24;
+
+# ## Cloudflare settings:
+# include /etc/nginx/conf.d/cloudflare/whitelist.conf;
+# include /etc/nginx/conf.d/cloudflare/log-format.conf;
+
+
+# server {
+# 	listen 192.168.0.1:80;
+
+# 	## Nginx stats (basic auth):
+# 	location = /basic-status {
+# 		auth_basic "Closed site";
+# 		auth_basic_user_file /etc/nginx/ssl/.htpasswd;
+
+# 		allow 127.0.0.1;
+# 		allow 192.168.0.0/24;
+# 		deny all;
+# 		stub_status;
+# 	}
+# }

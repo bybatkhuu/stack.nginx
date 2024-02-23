@@ -17,20 +17,21 @@ server {
 	server_name example.com www.example.com;
 
 	## Logging:
-	access_log /dev/stdout realip_combined;
-	access_log /var/log/nginx/example.com.access.${DOLLAR}map_date_now.log realip_combined;
-	access_log /var/log/nginx/example.com.access.json.${DOLLAR}map_date_now.log json_combined;
+	access_log /dev/stdout realip_combined if=${DOLLAR}loggable;
+	access_log /var/log/nginx/example.com.access.${DOLLAR}map_date_now.log realip_combined if=${DOLLAR}loggable;
+	access_log /var/log/nginx/example.com.access.json.${DOLLAR}map_date_now.log json_combined if=${DOLLAR}loggable;
 
 	## Restrict methods:
-	if (${DOLLAR}request_method !~ ^(GET|POST|PUT|PATCH|DELETE|HEAD|CONNECT|OPTIONS)${DOLLAR}) {
+	if (${DOLLAR}request_method ~ ^(TRACE)${DOLLAR}) {
 		return '405';
 	}
 
 	## SSL:
 	include /etc/nginx/conf.d/ssl.conf;
 	ssl_stapling on;
-	ssl_certificate /etc/nginx/ssl/example.com/cert.pem;
-	ssl_certificate_key /etc/nginx/ssl/example.com/key.pem;
+	ssl_certificate /etc/nginx/ssl/live/example.com/fullchain.pem;
+	ssl_certificate_key /etc/nginx/ssl/live/example.com/privkey.pem;
+	ssl_trusted_certificate /etc/nginx/ssl/live/example.com/chain.pem;
 
 	## Security headers:
 	add_header Access-Control-Allow-Origin "https://example.com" always;
@@ -63,24 +64,28 @@ server {
 	server_name api.example.com;
 
 	## Logging:
-	access_log /dev/stdout realip_combined if=${DOLLAR}loggable;
-	access_log /var/log/nginx/api.example.com.access.${DOLLAR}map_date_now.log realip_combined if=${DOLLAR}loggable;
-	access_log /var/log/nginx/api.example.com.access.json.${DOLLAR}map_date_now.log json_combined if=${DOLLAR}loggable;
+	access_log /dev/stdout realip_combined;
+	access_log /var/log/nginx/api.example.com.access.${DOLLAR}map_date_now.log realip_combined;
+	access_log /var/log/nginx/api.example.com.access.json.${DOLLAR}map_date_now.log json_combined;
 
 	## Restrict methods:
-	if (${DOLLAR}request_method !~ ^(GET|POST|PUT|PATCH|DELETE|HEAD|CONNECT|OPTIONS)${DOLLAR}) {
+	if (${DOLLAR}request_method ~ ^(TRACE)${DOLLAR}) {
 		return '405';
 	}
 
 	## SSL:
 	include /etc/nginx/conf.d/ssl.conf;
 	ssl_stapling on;
-	ssl_certificate /etc/nginx/ssl/example.com/cert.pem;
-	ssl_certificate_key /etc/nginx/ssl/example.com/key.pem;
+	ssl_certificate /etc/nginx/ssl/live/example.com/fullchain.pem;
+	ssl_certificate_key /etc/nginx/ssl/live/example.com/privkey.pem;
+	ssl_trusted_certificate /etc/nginx/ssl/live/example.com/chain.pem;
 
 	## Security headers:
 	# include /etc/nginx/conf.d/security-headers.conf;
 	include /etc/nginx/conf.d/api-headers.conf;
+
+	## Cloudflare headers:
+	# include /etc/nginx/conf.d/cloudflare/proxy.conf;
 
 	## Reverse proxy:
 	location / {
@@ -95,6 +100,8 @@ server {
 	listen 80;
 	listen [::]:80;
 	server_name .example.com;
+
+	include /etc/nginx/conf.d/letsencrypt.conf;
 
 	location / {
 		return 301 https://${DOLLAR}host${DOLLAR}request_uri;
