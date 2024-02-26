@@ -5,6 +5,7 @@
 #     volumes:
 #       - "./volumes/storage/certbot/secrets:/root/.secrets/certbot"
 #       - "./volumes/storage/certbot/secrets:/root/.aws"
+#       - "./volumes/storage/certbot/logs:/var/log/letsencrypt"
 #     deploy:
 #       replicas: 0
 #       resources:

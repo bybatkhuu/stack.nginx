@@ -9,7 +9,6 @@ services:
       - CERTBOT_DOMAINS=${CERTBOT_DOMAINS}
       - CERTBOT_DNS_TIMEOUT=${CERTBOT_DNS_TIMEOUT:-30}
     volumes:
-      - "./volumes/storage/certbot/logs:/var/log/letsencrypt"
       - "./volumes/storage/nginx/www/.well-known/acme-challenge:/var/www/.well-known/acme-challenge"
       - "./volumes/storage/nginx/ssl:/etc/letsencrypt"
     network_mode: host

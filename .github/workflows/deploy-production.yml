@@ -49,7 +49,7 @@ jobs:
       - name: Stop services
         run: sleep 3 && ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && docker compose down --remove-orphans'
       - name: Backup
-        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && echo "${{ secrets.DEPLOY_USER_PASSWORD }}" | sudo -S ./scripts/backup.sh'
+        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && ./scripts/backup.sh'
       - name: Update to latest version
         run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && git checkout production && git fetch origin production && git reset --hard origin/production && docker compose pull'
       - name: Start services

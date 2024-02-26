@@ -77,7 +77,7 @@ cd ~/workspaces/projects
 **A.** Clone the repository (for **LOCAL**, **TEST**, **STAGING** or **PRODUCTION** environments):
 
 ```sh
-git https://github.com/bybatkhuu/stack.nginx.git && \
+git clone https://github.com/bybatkhuu/stack.nginx.git && \
     cd stack.nginx
 ```
 
