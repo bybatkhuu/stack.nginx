@@ -62,6 +62,7 @@ main()
 
 	if [ "${_IS_ALL}" == true ]; then
 		# rm -rfv ./volumes/storage/nginx/ssl/* || exit 2
+		rm -rf ./volumes/.vscode-server/* || exit 2
 		rm -rfv ./volumes/backups || exit 2
 
 		docker compose down -v --remove-orphans || exit 2

@@ -11,44 +11,41 @@
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
 	"editor.tabSize": 4,
-	"[markdown]":
-	{
+	"[markdown]": {
 		"editor.insertSpaces": true,
 		"files.trimTrailingWhitespace": false
 	},
-	"[python]":
-	{
+	"[python]": {
 		"editor.defaultFormatter": "ms-python.black-formatter",
 		"editor.formatOnSave": true,
 		"editor.insertSpaces": true
 	},
-	"[yml]":
-	{
+	"[yml]": {
 		"editor.formatOnSave": true,
 		"editor.insertSpaces": true,
 		"editor.tabSize": 2
 	},
-	"[json]":
-	{
+	"[json]": {
+		"editor.formatOnSave": true
+	},
+	"[jsonc]": {
 		"editor.formatOnSave": true
 	},
 	"files.eol": "\n",
 	"files.trimTrailingWhitespace": true,
-	"files.associations":
-	{
+	"files.associations": {
 		"*.env": "dotenv",
 		"*.env.*": "dotenv",
 		"*.json": "jsonc",
 		"*.json.example": "jsonc",
-		"requirements*.txt": "pip-requirements",
 		"*Dockerfile*": "dockerfile",
-		"*.py.bak": "python",
-		"*.conf.template": "nginx",
 		".dockerignore": "ignore",
-		".gitignore": "ignore"
+		".gitignore": "ignore",
+		"*.conf.template": "nginx",
+		"*.py.bak": "python",
+		"requirements*.txt": "pip-requirements"
 	},
-	"files.watcherExclude":
-	{
+	"files.watcherExclude": {
 		"**/.git/**": true,
 		"**/.git/objects/**": true,
 		"**/.git/subtree-cache/**": true,
@@ -82,8 +79,7 @@
 		"**/.DS_Store": true,
 		"**/Thumbs.db": true
 	},
-	"files.exclude":
-	{
+	"files.exclude": {
 		"**/.git": false,
 		"**/.svn": false,
 		"**/.hg": false,
@@ -93,8 +89,7 @@
 	},
 	"search.useIgnoreFiles": false,
 	"search.showLineNumbers": true,
-	"search.exclude":
-	{
+	"search.exclude": {
 		"**/.git": true,
 		"**/.svn": true,
 		"**/.hg": true,
