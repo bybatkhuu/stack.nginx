@@ -2,7 +2,6 @@
 
 # ## Cloudflare settings:
 # include /etc/nginx/conf.d/cloudflare/whitelist.conf;
-# include /etc/nginx/conf.d/cloudflare/log-format.conf;
 
 
 # server {
