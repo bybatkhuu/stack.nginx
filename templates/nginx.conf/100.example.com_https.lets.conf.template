@@ -20,6 +20,7 @@ server {
 	access_log /dev/stdout realip_combined if=${DOLLAR}loggable;
 	access_log /var/log/nginx/example.com.access.${DOLLAR}map_date_now.log realip_combined if=${DOLLAR}loggable;
 	access_log /var/log/nginx/example.com.access.json.${DOLLAR}map_date_now.log json_combined if=${DOLLAR}loggable;
+	# access_log /var/log/nginx/example.com.access.json.${DOLLAR}map_date_now.log cf_json_combined if=${DOLLAR}loggable;
 
 	## Restrict methods:
 	if (${DOLLAR}request_method ~ ^(TRACE)${DOLLAR}) {
