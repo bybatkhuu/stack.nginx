@@ -42,7 +42,7 @@ server {
 	root /var/www/web/public;
 
 	location / {
-		try_files ${DOLLAR}uri ${DOLLAR}uri/ =404;
+		try_files ${DOLLAR}uri ${DOLLAR}uri.html ${DOLLAR}uri/ =404;
 	}
 
 	## Sub-path as static files:
