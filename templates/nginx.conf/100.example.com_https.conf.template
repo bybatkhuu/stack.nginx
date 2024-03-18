@@ -49,10 +49,11 @@ server {
 	}
 
 	# error_page 404 /404.html;
-
 	# location = /404.html {
 	# 	internal;
 	# }
+
+	# include /etc/nginx/conf.d/error-pages.conf;
 
 	## Sub-path as static files:
 	# location ^~ /demo {
@@ -73,6 +74,7 @@ server {
 	access_log /dev/stdout realip_combined;
 	access_log /var/log/nginx/api.example.com.access.${DOLLAR}map_date_now.log realip_combined;
 	access_log /var/log/nginx/api.example.com.access.json.${DOLLAR}map_date_now.log json_combined;
+	# access_log /var/log/nginx/api.example.com.access.json.${DOLLAR}map_date_now.log cf_json_combined if=${DOLLAR}loggable;
 
 	## Restrict methods:
 	if (${DOLLAR}request_method ~ ^(TRACE)${DOLLAR}) {
