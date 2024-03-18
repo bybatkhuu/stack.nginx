@@ -15,20 +15,26 @@
 		"editor.insertSpaces": true,
 		"files.trimTrailingWhitespace": false
 	},
+	"[html]": {
+		"editor.formatOnSave": true
+	},
+	"[css][scss]": {
+		"editor.formatOnSave": true
+	},
+	"[javascript][typescript]": {
+		"editor.formatOnSave": true
+	},
 	"[python]": {
 		"editor.defaultFormatter": "ms-python.black-formatter",
 		"editor.formatOnSave": true,
 		"editor.insertSpaces": true
 	},
-	"[yml]": {
+	"[yml][yaml]": {
 		"editor.formatOnSave": true,
 		"editor.insertSpaces": true,
 		"editor.tabSize": 2
 	},
-	"[json]": {
-		"editor.formatOnSave": true
-	},
-	"[jsonc]": {
+	"[json][jsonc]": {
 		"editor.formatOnSave": true
 	},
 	"files.eol": "\n",
