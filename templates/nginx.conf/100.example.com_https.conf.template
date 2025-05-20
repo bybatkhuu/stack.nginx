@@ -12,8 +12,9 @@ upstream api-server {
 
 # Main domain as static files (HTTPS):
 server {
-	listen 443 ssl http2;
-	listen [::]:443 ssl http2;
+	listen 443 ssl;
+	listen [::]:443 ssl;
+	http2 on;
 	server_name example.com www.example.com;
 
 	## Logging:
@@ -66,8 +67,9 @@ server {
 
 ## Subdomain as reverse proxy (HTTPS):
 server {
-	listen 443 ssl http2;
-	listen [::]:443 ssl http2;
+	listen 443 ssl;
+	listen [::]:443 ssl;
+	http2 on;
 	server_name api.example.com;
 
 	## Logging:
