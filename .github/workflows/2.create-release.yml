@@ -37,4 +37,4 @@ jobs:
         if: ${{ env._WORKFLOW_STATE == 'active' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh workflow run 4.update-changelog.yml
+        run: gh workflow run 3.update-changelog.yml
