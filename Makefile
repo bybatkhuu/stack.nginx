@@ -1,32 +1,49 @@
+.PHONY: help validate start logs stop compose clean get-version bump-version backup docs changelog
+
 help:
 	@echo "make help         -- show this help"
-	@echo "make validate     -- validate compose.yml file"
-	@echo "make start        -- start all services"
-	@echo "make stop         -- stop all services"
+	@echo "make validate	 -- validate docker-compose files"
+	@echo "make start        -- start docker-compose services"
+	@echo "make logs         -- show docker-compose logs for all services"
+	@echo "make stop         -- stop docker-compose services"
+	@echo "make compose      -- run docker-compose with arguments"
+	@echo "make clean        -- clean leftovers and build files"
 	@echo "make get-version  -- get current version"
 	@echo "make bump-version -- bump version"
-	@echo "make build        -- build docker image"
-	@echo "make clean        -- clean all"
+	@echo "make backup       -- backup storage data"
+	@echo "make docs         -- generate documentation"
+	@echo "make changelog    -- update changelog"
 
 
 validate:
-	docker compose config
+	./compose.sh validate
 
 start:
-	docker compose up -d --remove-orphans --force-recreate && \
-		docker compose logs -f --tail 100
+	./compose.sh start -l
+
+logs:
+	./compose.sh logs
 
 stop:
-	docker compose down --remove-orphans
+	./compose.sh down
+
+compose:
+	./compose.sh $(MAKEFLAGS)
+
+clean:
+	./scripts/clean.sh $(MAKEFLAGS)
 
 get-version:
 	./scripts/get-version.sh
 
 bump-version:
-	./scripts/bump-version.sh -b=patch
+	./scripts/bump-version.sh $(MAKEFLAGS)
 
-build:
-	./scripts/build.sh
+backup:
+	./scripts/backup.sh
 
-clean:
-	./scripts/clean.sh -a
+docs:
+	./scripts/docs.sh $(MAKEFLAGS)
+
+changelog:
+	./scripts/changelog.sh $(MAKEFLAGS)

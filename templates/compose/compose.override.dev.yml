@@ -1,8 +1,6 @@
 services:
   certbot:
-    image: ${IMG_REGISTRY:-bybatkhuu}/certbot:latest
-    # env_file:
-    #   - .env
+    image: bybatkhuu/certbot:latest
     volumes:
       # - "./volumes/storage/certbot/secrets:/root/.secrets/certbot"
       # - "./volumes/storage/certbot/secrets:/root/.aws"
@@ -31,12 +29,7 @@ services:
     # command: ["/bin/bash"]
 
   nginx:
-    image: ${IMG_REGISTRY:-bybatkhuu}/nginx:latest
-    # env_file:
-    #   - .env
-    # environment:
-    #   - NGINX_BASIC_AUTH_USER=${NGINX_BASIC_AUTH_USER}
-    #   - NGINX_BASIC_AUTH_PASS=${NGINX_BASIC_AUTH_PASS}
+    image: bybatkhuu/nginx:latest
     volumes:
       - "./volumes/src/server.nginx-template/src/configs/nginx.conf:/etc/nginx/nginx.conf"
       - "./volumes/src/server.nginx-template/scripts/docker/nginx-reload.sh:/usr/local/bin/nginx-reload.sh"

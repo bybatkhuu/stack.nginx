@@ -6,7 +6,7 @@
 
 This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
 
-## Features
+## ✨ Features
 
 - NGINX - <https://nginx.org>
 - Let's Encrypt - <https://letsencrypt.org>
@@ -41,9 +41,9 @@ This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
 
 ---
 
-## Getting started
+## 🐤 Getting Started
 
-### 1. Prerequisites
+### 1. 🚧 Prerequisites
 
 - Prepare **server/PC** with **public IP address**
 - Buy or register **domain name**
@@ -53,14 +53,16 @@ This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
     - GoDaddy - <https://developer.godaddy.com/keys>
     - AWS Route53 - <https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys>
     - Google Cloud DNS - <https://cloud.google.com/docs/authentication/getting-started>
-- Install [**docker**](https://docs.docker.com/engine/install) and [**docker compose**](https://docs.docker.com/compose/install) in **server**
+- Install [**docker** and **docker compose**](https://docs.docker.com/engine/install) in **server**
+    - Certbot docker image: [**bybatkhuu/certbot**](https://hub.docker.com/r/bybatkhuu/certbot)
+    - Nginx docker image: [**bybatkhuu/nginx**](https://hub.docker.com/r/bybatkhuu/nginx)
 
 For **DEVELOPMENT**:
 
 - Install [**git**](https://git-scm.com/downloads)
 - Setup an [**SSH key**](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh) ([video tutorial](https://www.youtube.com/watch?v=snCP3c7wXw0))
 
-### 2. Download or clone the repository
+### 2. 📥 Download or clone the repository
 
 **2.1.** Prepare projects directory (if not exists) in your **server** with **public IP address**:
 
@@ -72,16 +74,16 @@ mkdir -pv ~/workspaces/projects
 cd ~/workspaces/projects
 ```
 
-**2.2.** Follow one of the below options **[A]**, **[B]** or **[C]**:
+**2.2.** Follow one of the below options **[A]**, **[B]**, **[C]** or **[D]**:
 
-**A.** Clone the repository (for **LOCAL**, **TEST**, **STAGING** or **PRODUCTION** environments):
+**OPTION A.** Clone the repository:
 
 ```sh
 git clone https://github.com/bybatkhuu/stack.nginx.git && \
     cd stack.nginx
 ```
 
-**B.** Clone with all submodules (for **DEVELOPMENT** environments - **Gigachad** developers):
+**OPTION B.** Clone with all submodules:
 
 ```sh
 git clone --recursive https://github.com/bybatkhuu/stack.nginx.git && \
@@ -90,17 +92,24 @@ git clone --recursive https://github.com/bybatkhuu/stack.nginx.git && \
     git submodule foreach --recursive git checkout main
 ```
 
-**C.** Download source code from [releases](https://github.com/bybatkhuu/stack.nginx/releases) page.
+**OPTION C.** Clone with all submodules (for **DEVELOPMENT**: git + ssh key):
 
-### 3. Configure environment
+```sh
+git clone --recursive git@github.com:bybatkhuu/stack.nginx.git && \
+    cd stack.nginx && \
+    git submodule update --init --recursive && \
+    git submodule foreach --recursive git checkout main
+```
 
-> [!TIP]
-> Skip this step, if you've already configured environment.
+**OPTION D.** Download source code from [releases](https://github.com/bybatkhuu/stack.nginx/releases) page.
 
-**3.1.** Configure **`.env`** file:
+### 3. 🛠 Configure the environment
 
-> [!IMPORTANT]
-> Please, check **[environment variables](#environment-variables)**!
+[TIP] Skip this step, if you've already configured environment!
+
+#### 3.1. 🌎 Configure **`.env`** (environment variables) file
+
+**[IMPORTANT]** Please, check **[environment variables](#-environment-variables)** section for more details.
 
 ```sh
 # Copy .env.example file into .env file:
@@ -110,27 +119,30 @@ cp -v .env.example .env
 nano .env
 ```
 
-**3.2.** Configure **`compose.override.yml`** file:
+#### 3.2. 🎺 Configure **`compose.override.yml`** file
 
-> [!IMPORTANT]
-> Please, check **[arguments](#arguments)**!
+[TIP] Skip this step, if you want run with default configuration!
+
+You can use below template **`compose.override.yml`** files for different environments:
+
+- **DEVELOPMENT**: [**`compose.override.dev.yml`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/compose/compose.override.dev.yml)
+- **PRODUCTION/STAGING**: [**`compose.override.prod.yml`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/compose/compose.override.prod.yml)
 
 ```sh
 # Copy 'compose.override.[ENV].yml' file to 'compose.override.yml' file:
 cp -v ./templates/compose/compose.override.[ENV].yml ./compose.override.yml
 # For example, DEVELOPMENT environment:
 cp -v ./templates/compose/compose.override.dev.yml ./compose.override.yml
-# For example, STATGING or PRODUCTION environment:
+# For example, STAGING or PRODUCTION environment:
 cp -v ./templates/compose/compose.override.prod.yml ./compose.override.yml
 
 # Edit 'compose.override.yml' file to fit in your environment:
 nano ./compose.override.yml
 ```
 
-**3.3.** Validate docker compose configuration:
+#### 3.3. ✅ Check docker compose configuration is valid
 
-> [!WARNING]
-> If you get an error or warning, check your configuration files (**`.env`** or **`compose.override.yml`**).
+**[WARNING]** If you get an error or warning, check your configuration files (**`.env`** or **`compose.override.yml`**).
 
 ```sh
 ./compose.sh validate
@@ -138,13 +150,11 @@ nano ./compose.override.yml
 docker compose config
 ```
 
-### 4. Configure NGINX
+### 4. 🔧 Configure NGINX
 
-> [!TIP]
-> Skip this step, if you've already configured NGINX.
+[TIP] Skip this step, if you've already configured NGINX.
 
-> [!IMPORTANT]
-> Please, check nginx configuration and best practices:
+**[IMPORTANT]** Please, check nginx configuration and best practices:
 
 - <https://www.udemy.com/course/nginx-fundamentals>
 - <https://www.baeldung.com/linux/nginx-config-environment-variables>
@@ -154,24 +164,26 @@ docker compose config
 - <https://www.digitalocean.com/community/tools/nginx>
 - <https://github.com/fcambus/nginx-resources>
 
-Use template files to configure NGINX:
+Use template files in [**`templates/nginx.conf`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/nginx.conf) to configure NGINX:
 
 ```sh
 # Copy template file into storage directory:
 cp -v ./templates/nginx.conf/[TEMPLATE_BASENAME].conf.template ./volumes/storage/nginx/configs/templates/[CUSTOM_BASENAME].conf.template
 # For example, Let's Encrypt HTTPS configuration for example.com domain:
-cp -v ./templates/nginx.conf/example.com_https.lets.conf.template ./volumes/storage/nginx/configs/templates/example.com.conf.template
+cp -v ./templates/nginx.conf/100.example.com_https.lets.conf.template ./volumes/storage/nginx/configs/templates/100.example.com.conf.template
 
 # Edit template file to fit in your nginx configuration:
 nano ./volumes/storage/nginx/configs/templates/[CUSTOM_BASENAME].conf.template
 # For example:
-nano ./volumes/storage/nginx/configs/templates/example.com.conf.template
+nano ./volumes/storage/nginx/configs/templates/100.example.com.conf.template
 ```
 
-### 5. Run docker compose
+### 5. 🚀 Start docker compose
 
-> [!CAUTION]
-> If **container names** are conflicting, you should change **project directory name (stack.nginx)** from [**2.2. step**](#2-download-or-clone-the-repository).
+**[CAUTION]**:
+
+- If ports are conflicting, you should change ports from [**3. step**](#3--configure-the-environment).
+- If container names are conflicting, you should change project directory name (from **`stack.nginx`** to something else, e.g: `prod.stack.nginx`) from [**2.2. step**](#2--download-or-clone-the-repository).
 
 ```sh
 ./compose.sh start -l
@@ -180,7 +192,9 @@ docker compose up -d --remove-orphans --force-recreate && \
     docker compose logs -f --tail 100
 ```
 
-### 6. Check service is running
+### 6. 📡 Check services are running and monitor logs
+
+📋 Check all services are running:
 
 ```sh
 ./compose.sh list
@@ -188,7 +202,31 @@ docker compose up -d --remove-orphans --force-recreate && \
 docker compose ps
 ```
 
-Check certificates:
+📟 Monitor all logs of containers:
+
+```sh
+./compose.sh logs
+# Or:
+docker compose logs -f --tail 100
+```
+
+🧵 List all running processes inside containers:
+
+```sh
+./compose.sh ps
+# Or:
+docker compose top
+```
+
+📊 Check resource usage of containers:
+
+```sh
+./compose.sh stats
+# Or:
+docker compose stats
+```
+
+🔐 Check certificates:
 
 ```sh
 ./compose.sh certs
@@ -200,7 +238,7 @@ ls -alhF ./volumes/storage/nginx/ssl
 tree -alFC --dirsfirst -L 5 ./volumes/storage/nginx/ssl
 ```
 
-### 7. Stop docker compose
+### 7. 🪂 Stop docker compose
 
 ```sh
 ./compose.sh stop
@@ -208,15 +246,17 @@ tree -alFC --dirsfirst -L 5 ./volumes/storage/nginx/ssl
 docker compose down --remove-orphans
 ```
 
-:thumbsup: :sparkles:
+👍
 
 ---
 
-## Environment Variables
+## ⚙️ Configuration
+
+### 🌎 Environment Variables
 
 You can use the following environment variables to configure:
 
-[**`.env.example`**](.env.example)
+[**`.env.example`**](https://github.com/bybatkhuu/stack.nginx/blob/main/.env.example):
 
 ```sh
 ## --- CERTBOT configs --- ##
@@ -228,9 +268,14 @@ CERTBOT_DNS_TIMEOUT=30
 ## --- NGINX configs --- ##
 NGINX_BASIC_AUTH_USER=nginx_admin
 NGINX_BASIC_AUTH_PASS="NGINX_ADMIN_PASSWORD123" # !!! CHANGE THIS TO RANDOM PASSWORD !!!
+
+
+## -- Docker configs -- ##
+# NGINX_HTTP_PORT=80 # port for bridge network mode
+# NGINX_HTTPS_PORT=443 # port for bridge network mode
 ```
 
-## Arguments
+### 🐳 Docker container command arguments
 
 You can use the following arguments to configure:
 
@@ -246,7 +291,7 @@ You can use the following arguments to configure:
     Run only bash shell.
 ```
 
-For example as in [**`compose.override.yml`**](templates/compose/compose.override.dev.yml) file:
+For example as in [**`compose.override.yml`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/compose/compose.override.dev.yml) file:
 
 ```yml
     command: ["--https=self"]
@@ -272,7 +317,7 @@ For example as in [**`compose.override.yml`**](templates/compose/compose.overrid
     Run only bash shell.
 ```
 
-For example as in [**`compose.override.yml`**](templates/compose/compose.override.dev.yml) file:
+For example as in [**`compose.override.yml`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/compose/compose.override.dev.yml) file:
 
 ```yml
     command: ["--server=production"]
@@ -286,14 +331,20 @@ For example as in [**`compose.override.yml`**](templates/compose/compose.overrid
     command: ["/bin/bash"]
 ```
 
-## Roadmap
+---
+
+## 📚 Documentation
+
+- [Docs](./docs)
+
+### 🛤 Roadmap
 
 - Add more DNS providers.
 - Add more documentation.
 
 ---
 
-## References
+## 📑 References
 
 - Download NGINX - <https://nginx.org/en/download.html>
 - Building NGINX from sources - <https://nginx.org/en/docs/configure.html>
@@ -313,3 +364,5 @@ For example as in [**`compose.override.yml`**](templates/compose/compose.overrid
 - Certbot documentation - <https://eff-certbot.readthedocs.io/en/stable>
 - Let's Encrypt - <https://letsencrypt.org>
 - Let's Encrypt documentation - <https://letsencrypt.org/docs>
+- Docker - <https://docs.docker.com>
+- Docker Compose - <https://docs.docker.com/compose>

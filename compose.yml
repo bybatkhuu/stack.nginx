@@ -1,6 +1,6 @@
 services:
   certbot:
-    image: ${IMG_REGISTRY:-bybatkhuu}/certbot:2.1.0-240222
+    image: bybatkhuu/certbot:3.0.0-250519
     restart: unless-stopped
     environment:
       - TERM=${TERM:-xterm}
@@ -8,6 +8,9 @@ services:
       - CERTBOT_EMAIL=${CERTBOT_EMAIL}
       - CERTBOT_DOMAINS=${CERTBOT_DOMAINS}
       - CERTBOT_DNS_TIMEOUT=${CERTBOT_DNS_TIMEOUT:-30}
+    env_file:
+      - path: .env
+        required: false
     volumes:
       - "./volumes/storage/nginx/www/.well-known/acme-challenge:/var/www/.well-known/acme-challenge"
       - "./volumes/storage/nginx/ssl:/etc/letsencrypt"
@@ -15,13 +18,16 @@ services:
     tty: true
 
   nginx:
-    image: ${IMG_REGISTRY:-bybatkhuu}/nginx:2.2.1-240319
+    image: bybatkhuu/nginx:3.0.1-250519
     depends_on:
       - certbot
     restart: unless-stopped
     environment:
       - TERM=${TERM:-xterm}
       - TZ=${TZ:-Asia/Seoul}
+    env_file:
+      - path: .env
+        required: false
     volumes:
       - "./volumes/storage/nginx/logs:/var/log/nginx"
       - "./volumes/storage/nginx/www:/var/www"
