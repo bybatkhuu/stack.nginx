@@ -22,6 +22,7 @@ services:
     # command: ["--renew=standalone"]
     # command: ["--disable-renew"]
     # command: ["--dns=cloudflare"]
+    # command: ["--server=production", "--dns=cloudflare"]
     # command: ["--dns=digitalocean"]
     # command: ["--dns=route53"]
     # command: ["--dns=google"]

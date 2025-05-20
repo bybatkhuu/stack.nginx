@@ -48,14 +48,24 @@ This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
 - Prepare **server/PC** with **public IP address**
 - Buy or register **domain name**
 - **[RECOMMENDED]** DNS provider **API token/credentials** (required for **DNS challenges** and **wildcard subdomains**):
-    - Cloudflare - <https://dash.cloudflare.com/profile/api-tokens>
-    - DigitalOcean - <https://cloud.digitalocean.com/account/api/tokens>
-    - GoDaddy - <https://developer.godaddy.com/keys>
-    - AWS Route53 - <https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys>
-    - Google Cloud DNS - <https://cloud.google.com/docs/authentication/getting-started>
+    - Cloudflare:
+        - API tokens - <https://dash.cloudflare.com/profile/api-tokens>
+        - certbot-dns-cloudflare - <https://certbot-dns-cloudflare.readthedocs.io/en/stable>
+    - DigitalOcean:
+        - API tokens - <https://cloud.digitalocean.com/account/api/tokens>
+        - certbot-dns-digitalocean - <https://certbot-dns-digitalocean.readthedocs.io/en/stable>
+    - GoDaddy:
+        - API keys - <https://developer.godaddy.com/keys>
+        - certbot-dns-godaddy - <https://github.com/miigotu/certbot-dns-godaddy>
+    - AWS Route53:
+        - AWS access keys - <https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys>
+        - certbot-dns-route53 - <https://certbot-dns-route53.readthedocs.io/en/stable>
+    - Google Cloud DNS:
+        - GCP credentials/service accounts - <https://cloud.google.com/iam/docs/service-accounts-create>
+        - certbot-dns-google - <https://certbot-dns-google.readthedocs.io/en/stable>
 - Install [**docker** and **docker compose**](https://docs.docker.com/engine/install) in **server**
-    - Certbot docker image: [**bybatkhuu/certbot**](https://hub.docker.com/r/bybatkhuu/certbot)
     - Nginx docker image: [**bybatkhuu/nginx**](https://hub.docker.com/r/bybatkhuu/nginx)
+    - Certbot docker image: [**bybatkhuu/certbot**](https://hub.docker.com/r/bybatkhuu/certbot)
 
 For **DEVELOPMENT**:
 
@@ -235,7 +245,7 @@ docker compose exec certbot certbot certificates
 # Or check certificates in host:
 ls -alhF ./volumes/storage/nginx/ssl
 # Or check certificates in host with tree:
-tree -alFC --dirsfirst -L 5 ./volumes/storage/nginx/ssl
+tree ./volumes/storage/nginx/ssl
 ```
 
 ### 7. 🪂 Stop docker compose
