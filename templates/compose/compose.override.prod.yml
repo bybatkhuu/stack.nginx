@@ -1,7 +1,5 @@
 # services:
 #   certbot:
-#     env_file:
-#       - .env
 #     volumes:
 #       - "./volumes/storage/certbot/secrets:/root/.secrets/certbot"
 #       - "./volumes/storage/certbot/secrets:/root/.aws"
@@ -26,11 +24,6 @@
 #     command: ["/bin/bash"]
 
 #   nginx:
-#     env_file:
-#       - .env
-#     environment:
-#       - NGINX_BASIC_AUTH_USER=${NGINX_BASIC_AUTH_USER}
-#       - NGINX_BASIC_AUTH_PASS=${NGINX_BASIC_AUTH_PASS}
 #     deploy:
 #       replicas: 0
 #       resources:

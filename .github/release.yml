@@ -28,16 +28,12 @@ changelog:
         - documentation
         - readme
         - changelog
-        - markdown
+        - localizations
     - title: 🧪 Tests
       labels:
         - test
         - tests
         - testing
-        - unit-test
-        - integration-test
-        - e2e-test
-        - stress-test
     - title: ⚡️ Performance
       labels:
         - perf
@@ -59,10 +55,13 @@ changelog:
       labels:
         - style
         - styles
-        - format
         - formatting
         - lint
+        - linter
         - linting
+        - prettier
+        - eslint
+        - black
     - title: 🚑️ Critical Hotfix
       labels:
         - hotfix
@@ -76,26 +75,21 @@ changelog:
         - vulnerability
         - exploit
         - hacker
-        - cve
-    - title: 📌 Dependencies
+        - bug-bounty
+        - bugbounty
+    - title: 📦 Dependencies
       labels:
         - dependencies
         - dependency
         - dependabot
-    - title: 🐳 Docker
-      labels:
-        - docker
-        - dockerfile
-        - docker-compose
-        - compose
-        - container
+        - dependabot-pr
     - title: 🔨 Scripts
       labels:
         - script
         - scripts
         - tool
         - tools
-    - title: 🗑️ Deprecation
+    - title: 🗑️ Deprecations
       labels:
         - deprecate
         - deprecated
