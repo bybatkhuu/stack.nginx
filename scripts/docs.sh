@@ -37,7 +37,7 @@ main()
 					_IS_PUBLISH=true
 					shift;;
 				*)
-					echo "[ERROR]: Failed to parsing input -> ${_input}"
+					echo "[ERROR]: Failed to parse input -> ${_input}"
 					echo "[INFO]: USAGE: ${0}  -b, --build | -p, --publish"
 					exit 1;;
 			esac

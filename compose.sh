@@ -111,7 +111,7 @@ _doStats()
 _doExec()
 {
 	if [ -z "${1:-}" ]; then
-		echo "[ERROR]: Not found any arguments for exec command!"
+		echo "[ERROR]: No arguments provided for exec command!"
 		exit 1
 	fi
 
@@ -232,7 +232,7 @@ main()
 			shift
 			_doUpdate "${@:-}";;
 		*)
-			echo "[ERROR]: Failed to parsing input: ${*}"
+			echo "[ERROR]: Failed to parse input: ${*}"
 			_exitOnWrongParams;;
 	esac
 

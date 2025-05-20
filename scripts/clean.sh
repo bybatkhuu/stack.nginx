@@ -49,7 +49,7 @@ main()
 					_IS_FORCE=true
 					shift;;
 				*)
-					echo "[ERROR]: Failed to parsing input -> ${_input}"
+					echo "[ERROR]: Failed to parse input -> ${_input}"
 					echo "[INFO]: USAGE: ${0}  -l, --logs | -d, --data | -b, --backups | -a, --all | -f, --force"
 					exit 1;;
 			esac

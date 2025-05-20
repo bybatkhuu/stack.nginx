@@ -50,7 +50,7 @@ main()
 					_IS_PUSH=true
 					shift;;
 				*)
-					echo "[ERROR]: Failed to parsing input -> ${_input}"
+					echo "[ERROR]: Failed to parse input -> ${_input}"
 					echo "[INFO]: USAGE: ${0}  -b=*, --bump-type=* [major | minor | patch] | -c, --commit | -t, --tag | -p, --push"
 					exit 1;;
 			esac
