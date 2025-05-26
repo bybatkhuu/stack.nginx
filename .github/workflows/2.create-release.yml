@@ -31,7 +31,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          _WORKFLOW_STATE=$(gh api repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/workflows/4.update-changelog.yml | jq -r '.state')
+          _WORKFLOW_STATE=$(gh api repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/workflows/3.update-changelog.yml | jq -r '.state')
           echo "_WORKFLOW_STATE=${_WORKFLOW_STATE}" >> ${GITHUB_ENV}
       - name: Trigger Changelog
         if: ${{ env._WORKFLOW_STATE == 'active' }}
