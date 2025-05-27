@@ -2,9 +2,14 @@ version: 2
 updates:
   - package-ecosystem: "docker-compose"
     directory: "/"
+    assignees:
+      - "dependabot"
+    reviewers:
+      - "bybatkhuu"
+      - "Copilot"
     labels:
-      - "dependencies"
+      - "dependency"
       - "docker"
     schedule:
-      interval: "cron"
-      cronjob: "35 6 * * *"
+      interval: "daily"
+    open-pull-requests-limit: 5
