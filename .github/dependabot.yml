@@ -4,12 +4,9 @@ updates:
     directory: "/"
     assignees:
       - "dependabot"
-    reviewers:
-      - "bybatkhuu"
-      - "Copilot"
     labels:
       - "dependency"
       - "docker"
+    open-pull-requests-limit: 10
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 5
