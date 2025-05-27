@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "docker-compose"
+    directory: "/"
+    labels:
+      - "dependencies"
+      - "docker"
+    schedule:
+      interval: "cron"
+      cronjob: "* * * 5 *"

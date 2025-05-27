@@ -16,6 +16,7 @@
 #     command: ["--server=production", "--new=webroot"]
 #     command: ["--server=production", "--renew=standalone"]
 #     command: ["--server=production", "--disable-renew"]
+#     command: ["--dns=cloudflare"]
 #     command: ["--server=production", "--dns=cloudflare"]
 #     command: ["--server=production", "--dns=digitalocean"]
 #     command: ["--server=production", "--dns=route53"]
@@ -24,6 +25,8 @@
 #     command: ["/bin/bash"]
 
 #   nginx:
+#     volumes:
+#       - "./volumes/storage/nginx/configs/nginx.conf:/etc/nginx/nginx.conf"
 #     deploy:
 #       replicas: 0
 #       resources:
