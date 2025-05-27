@@ -3,10 +3,10 @@ name: Deploy Production
 on:
   push:
     branches:
-      - production
+      - prod
   # pull_request:
   #   branches:
-  #     - production
+  #     - prod
   #   types:
   #     - closed
 
@@ -19,7 +19,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Tailscale
+      - name: Configure Tailscale
         uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
@@ -52,17 +52,17 @@ jobs:
       - name: Backup
         run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && ./scripts/backup.sh'
       - name: Update to latest version
-        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && git checkout production && git fetch origin production && git reset --hard origin/production && docker compose pull'
+        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && git checkout prod && git fetch origin prod && git reset --hard origin/prod && docker compose pull'
       - name: Start services
         if: ${{ always() }}
         run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && docker compose up -d --remove-orphans --force-recreate'
-      # - name: Test deployment
-      #   shell: bash
-      #   run: |
-      #     count=120
-      #     while ! curl -kIf ${{ secrets.PUBLIC_URL }} ; do
-      #       echo "Waiting to curl...";
-      #       sleep 1;
-      #       let count=count-1
-      #     done
-      #     echo "OK: Deployment successful!"
+      - name: Test deployment
+        shell: bash
+        run: |
+          count=120
+          while ! curl -kIf ${{ secrets.PUBLIC_URL }} ; do
+            echo "Waiting to curl...";
+            sleep 1;
+            let count=count-1
+          done
+          echo "OK: Deployment successful!"
