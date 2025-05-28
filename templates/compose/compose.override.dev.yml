@@ -32,6 +32,7 @@ services:
   nginx:
     image: bybatkhuu/nginx:latest
     volumes:
+      # - "./volumes/storage/nginx/configs/nginx.conf:/etc/nginx/nginx.conf"
       - "./volumes/src/server.nginx-template/src/configs/nginx.conf:/etc/nginx/nginx.conf"
       - "./volumes/src/server.nginx-template/scripts/docker/nginx-reload.sh:/usr/local/bin/nginx-reload.sh"
       - "./volumes/src/server.nginx-template/scripts/docker/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
