@@ -1,5 +1,16 @@
 # Changelog
 
+## v4.0.5-250528 (2025-05-28)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.0.5-250528 -->
+
+## What's Changed
+### 🐛 Fixes
+* :arrow_up: Update certbot and nginx images to latest versions; adjust… by @bybatkhuu in https://github.com/bybatkhuu/stack.nginx/pull/24
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack.nginx/compare/v4.0.4-250528...v4.0.5-250528
+
 ## v4.0.4-250528 (2025-05-28)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.0.4-250528 -->
