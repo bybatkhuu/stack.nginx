@@ -1,5 +1,17 @@
 # Changelog
 
+## v4.0.4-250528 (2025-05-28)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.0.4-250528 -->
+
+## What's Changed
+### 🐛 Fixes
+* :wrench: Update Nginx configuration and increase client max body size by @bybatkhuu in https://github.com/bybatkhuu/stack.nginx/pull/22
+* :arrow_up: Bump Nginx image version to '3.0.5-250528' by @bybatkhuu in https://github.com/bybatkhuu/stack.nginx/pull/23
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack.nginx/compare/v4.0.3-250527...v4.0.4-250528
+
 ## v4.0.3-250527 (2025-05-27)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.0.3-250527 -->
