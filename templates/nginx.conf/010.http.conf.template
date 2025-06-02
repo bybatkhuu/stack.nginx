@@ -61,7 +61,7 @@ server {
 
 		## Proxy headers:
 		include /etc/nginx/conf.d/proxy.conf;
-		include /etc/nginx/conf.d/proxy-timeout.conf;
+		# include /etc/nginx/conf.d/proxy-timeout.conf;
 		include /etc/nginx/conf.d/api-headers.conf;
 
 		proxy_pass http://api-server;

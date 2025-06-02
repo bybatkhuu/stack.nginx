@@ -55,7 +55,7 @@ server {
 	# 	internal;
 	# }
 
-	# include /etc/nginx/conf.d/error-pages.conf;
+	include /etc/nginx/conf.d/error-pages.conf;
 
 	## Sub-path as static files:
 	# location ^~ /demo {
@@ -86,7 +86,7 @@ server {
 
 	## SSL:
 	include /etc/nginx/conf.d/ssl.conf;
-	ssl_stapling on;
+	# ssl_stapling on;
 	ssl_certificate /etc/nginx/ssl/live/example.com/fullchain.pem;
 	ssl_certificate_key /etc/nginx/ssl/live/example.com/privkey.pem;
 	ssl_trusted_certificate /etc/nginx/ssl/live/example.com/chain.pem;
@@ -99,7 +99,7 @@ server {
 
 	## Proxy headers:
 	include /etc/nginx/conf.d/proxy.conf;
-	include /etc/nginx/conf.d/proxy-timeout.conf;
+	# include /etc/nginx/conf.d/proxy-timeout.conf;
 	include /etc/nginx/conf.d/api-headers.conf;
 
 	## Reverse proxy:
