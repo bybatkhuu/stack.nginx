@@ -1,5 +1,16 @@
 # Changelog
 
+## v4.0.6-250605 (2025-06-05)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.0.6-250605 -->
+
+## What's Changed
+### 🐛 Fixes
+* Dev by @bybatkhuu in https://github.com/bybatkhuu/stack.nginx/pull/25
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack.nginx/compare/v4.0.5-250528...v4.0.6-250605
+
 ## v4.0.5-250528 (2025-05-28)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.0.5-250528 -->
