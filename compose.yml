@@ -18,7 +18,7 @@ services:
     tty: true
 
   nginx:
-    image: bybatkhuu/nginx:3.0.6-250528
+    image: bybatkhuu/nginx:3.0.7-250605
     depends_on:
       - certbot
     restart: unless-stopped
