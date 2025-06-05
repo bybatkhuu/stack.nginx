@@ -2,8 +2,6 @@ version: 2
 updates:
   - package-ecosystem: "docker-compose"
     directory: "/"
-    assignees:
-      - "dependabot"
     labels:
       - "dependency"
       - "docker"

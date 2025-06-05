@@ -47,10 +47,12 @@ jobs:
             let count=count-1
           done
           echo "OK: Connection established!"
-      - name: Stop services
-        run: sleep 3 && ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && docker compose down --remove-orphans'
+      - name: Run pre-deployment script
+        run: sleep 3 && ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && ./scripts/pre-deploy.sh'
       - name: Backup
         run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && ./scripts/backup.sh'
+      - name: Stop services
+        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && docker compose down --remove-orphans'
       - name: Update to latest version
         run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && git checkout prod && git fetch origin prod && git reset --hard origin/prod && docker compose pull'
       - name: Start services
@@ -66,3 +68,5 @@ jobs:
             let count=count-1
           done
           echo "OK: Deployment successful!"
+      - name: Run post-deployment script
+        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && ./scripts/post-deploy.sh'
