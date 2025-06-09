@@ -54,7 +54,7 @@ jobs:
       - name: Stop services
         run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && docker compose down --remove-orphans'
       - name: Update to latest version
-        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && git checkout prod && git fetch origin prod && git reset --hard origin/prod && docker compose pull'
+        run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && git fetch origin && git checkout -b prod origin/prod && && git reset --hard origin/prod && docker compose pull'
       - name: Start services
         if: ${{ always() }}
         run: ssh SERVER 'cd ${{ secrets.DEPLOY_PROJECT_DIR }} && docker compose up -d --remove-orphans --force-recreate'
