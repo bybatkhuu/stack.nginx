@@ -37,6 +37,9 @@
 	"[json][jsonc]": {
 		"editor.formatOnSave": true
 	},
+	"[toml]": {
+		"editor.formatOnSave": true
+	},
 	"files.eol": "\n",
 	"files.trimTrailingWhitespace": true,
 	"files.associations": {
@@ -72,10 +75,13 @@
 		"**/env/**": true,
 		"**/venv/**": true,
 		"**/envs/**": true,
+		"**/.venv/**": true,
 		"**/dist/**": true,
 		"**/sdist/**": true,
 		"**/build/**": true,
 		"**/builds/**": true,
+		"**/site/**": true,
+		"**/sites/**": true,
 		"**/log/**": true,
 		"**/logs/**": true,
 		"**/backup/**": true,
@@ -126,6 +132,8 @@
 		"**/sdist": true,
 		"**/build": true,
 		"**/builds": true,
+		"**/site": true,
+		"**/sites": true,
 		"**/log": true,
 		"**/logs": true,
 		"**/backup": true,
