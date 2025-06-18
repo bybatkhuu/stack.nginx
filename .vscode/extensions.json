@@ -2,7 +2,6 @@
 	"recommendations": [
 		"ms-vscode-remote.vscode-remote-extensionpack",
 		"ms-azuretools.vscode-containers",
-		"ms-toolsai.datawrangler",
 		"editorconfig.editorconfig",
 		"hediet.vscode-drawio",
 		"mikestead.dotenv",
