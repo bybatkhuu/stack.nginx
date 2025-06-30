@@ -47,7 +47,7 @@ jobs:
               echo "[ERROR]: Timed out waiting for Tailscale host!"
               exit 1
             fi
-            echo "Waiting to ping...";
+            echo "[INFO]: Waiting to ping...";
             sleep 1;
             ((count--))
           done
@@ -73,7 +73,7 @@ jobs:
               echo "[ERROR]: Timed out waiting for deployment!"
               exit 1
             fi
-            echo "Waiting to curl...";
+            echo "[INFO]: Waiting to curl...";
             sleep 1;
             ((count--))
           done
