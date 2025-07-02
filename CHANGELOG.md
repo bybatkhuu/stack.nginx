@@ -1,5 +1,22 @@
 # Changelog
 
+## v4.0.7-250702 (2025-07-02)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.0.7-250702 -->
+
+## What's Changed
+### 👷 CI/CD
+* Refactor GitHub Actions workflows and add dependency update script by @bybatkhuu in https://github.com/bybatkhuu/stack.nginx/pull/26
+* Improve dependency version checking and logging in depends.sh by @bybatkhuu in https://github.com/bybatkhuu/stack.nginx/pull/28
+### 📦 Dependencies
+* Update docker compose.yml dependency/image versions by @github-actions in https://github.com/bybatkhuu/stack.nginx/pull/29
+* Update Docker Compose dependency/image versions by @bybatkhuu in https://github.com/bybatkhuu/stack.nginx/pull/30
+
+## New Contributors
+* @github-actions made their first contribution in https://github.com/bybatkhuu/stack.nginx/pull/29
+
+**Full Changelog**: https://github.com/bybatkhuu/stack.nginx/compare/v4.0.6-250605...v4.0.7-250702
+
 ## v4.0.6-250605 (2025-06-05)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.0.6-250605 -->
