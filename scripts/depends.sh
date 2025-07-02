@@ -163,10 +163,10 @@ main()
 					echo "[INFO]: Creating pull request..."
 					gh pr create \
 						-t "Update docker compose.yml dependency/image versions" \
-						-b "This PR updates the versions of images in the docker-compose file." \
+						-b "This PR updates the versions of images in the docker compose.yml file." \
 						-l "dependencies" \
-						-B dev \
-						-r "${REPO_OWNER}" || exit 2
+						-r "${REPO_OWNER}" \
+						-B dev || exit 2
 					echo "[OK]: Done."
 				else
 					echo "[WARN]: You cannot create a pull request without a new branch!"
