@@ -25,7 +25,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create release
-        run: ./scripts/create-release.sh
+        run: ./scripts/release.sh
       - name: Check Workflow
         run: |
           _WORKFLOW_STATE=$(gh api repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/actions/workflows/3.update-changelog.yml | jq -r '.state')
