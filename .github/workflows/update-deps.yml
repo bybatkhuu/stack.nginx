@@ -1,27 +1,24 @@
-name: 1. Bump Version
+name: Update Dependencies
 
 on:
   workflow_dispatch:
-    inputs:
-      bump_type:
-        type: choice
-        description: "Choose bump version type:"
-        required: true
-        options: ["patch", "minor", "major"]
 
 jobs:
-  bump_version:
-    name: Bump Version
+  update_deps:
+    name: Update Dependencies
     runs-on: ubuntu-22.04
     permissions:
       contents: write
+      actions: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Bump version
+        with:
+          fetch-depth: 0
+      - name: Update dependencies
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          ./scripts/bump-version.sh -b=${{ inputs.bump_type }} -c -t -p
+          ./scripts/update-deps.sh -b -c -p -r
