@@ -97,13 +97,12 @@ main()
 	fi
 	## --- Menu arguments --- ##
 
+	echo "[INFO]: Checking and syncing for new versions of dependencies/submodules..."
 	_HAS_NEW_VERSIONS=false
-	echo "[INFO]: Checking for new versions of submodules..."
 	while read -r _submodule; do
 		_submodule_repo=$(echo "${_submodule}" | jq -r '.submodule_repo')
 		_image_name=$(echo "${_submodule}" | jq -r '.image_name')
 		_service_name=$(echo "${_submodule}" | jq -r '.service_name')
-		echo "[INFO]: Submodule repo: '${_submodule_repo}'"
 
 		_submodule_version="$(gh release view --json tagName --repo "${_submodule_repo}" | jq -r ".tagName" | tr -d 'v')" || exit 2
 		if [ -z "${_submodule_version}" ] || [ "${_submodule_version}" == "null" ]; then
@@ -125,7 +124,7 @@ main()
 		fi
 
 		if [ "${_HAS_NEW_VERSION}" == true ]; then
-			echo "[INFO]: Syncing '${_service_name}' service image version to: '${_latest_image}' ..."
+			echo "[INFO]: Syncing '${_service_name}' service image version to: '${_latest_image}'..."
 			yq -i ".services.${_service_name}.image = \"${_latest_image}\"" "${COMPOSE_FILE_PATH}"
 			echo "[OK]: Done."
 		fi
