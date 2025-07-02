@@ -97,54 +97,57 @@ main()
 	fi
 	## --- Menu arguments --- ##
 
-	echo "[INFO]: Checking for new versions of submodules..."
+	echo "[INFO]: Checking and syncing for new versions of dependencies/submodules..."
 	_HAS_NEW_VERSIONS=false
-	echo "${SUBMODULE_LIST}" | jq -c '.[]' | while read -r _submodule; do
+	while read -r _submodule; do
 		_submodule_repo=$(echo "${_submodule}" | jq -r '.submodule_repo')
 		_image_name=$(echo "${_submodule}" | jq -r '.image_name')
 		_service_name=$(echo "${_submodule}" | jq -r '.service_name')
-		echo "[INFO]: Submodule repo: '${_submodule_repo}'"
 
 		_submodule_version="$(gh release view --json tagName --repo "${_submodule_repo}" | jq -r ".tagName" | tr -d 'v')" || exit 2
 		if [ -z "${_submodule_version}" ] || [ "${_submodule_version}" == "null" ]; then
-			echo "[ERROR]: Not found release version from submodule: '${_submodule_repo}'!"
+			echo "[ERROR]: Not found any release version from submodule: '${_submodule_repo}'!"
 			exit 1
 		fi
 
 		_HAS_NEW_VERSION=false
-		if yq ".services.${_service_name}.image" "${COMPOSE_FILE_PATH}" | grep -q "${_image_name}:${_submodule_version}"; then
-			echo "[INFO]: The service '${_service_name}' with image '${_image_name}:${_submodule_version}' is already up-to-date."
+		_latest_image="${_image_name}:${_submodule_version}"
+		_current_image=$(yq ".services.${_service_name}.image" "${COMPOSE_FILE_PATH}")
+
+		if [ "${_current_image}" == "${_latest_image}" ]; then
+			echo "[INFO]: The service '${_service_name}' with image '${_latest_image}' is already up-to-date."
 			continue
 		else
+			echo "[INFO]: Found new version for service '${_service_name}': '${_latest_image}'."
 			_HAS_NEW_VERSION=true
 			_HAS_NEW_VERSIONS=true
 		fi
 
-		if [ "${_HAS_NEW_VERSION}" = true ]; then
-			echo "[INFO]: Syncing '${_service_name}' service image version to: '${_image_name}:${_submodule_version}' ..."
-			yq -i ".services.${_service_name}.image = \"${_image_name}:${_submodule_version}\"" "${COMPOSE_FILE_PATH}"
+		if [ "${_HAS_NEW_VERSION}" == true ]; then
+			echo "[INFO]: Syncing '${_service_name}' service image version to: '${_latest_image}'..."
+			yq -i ".services.${_service_name}.image = \"${_latest_image}\"" "${COMPOSE_FILE_PATH}"
 			echo "[OK]: Done."
 		fi
-	done
+	done < <(echo "${SUBMODULE_LIST}" | jq -c '.[]')
 
-	if [ "${_HAS_NEW_VERSIONS}" = false ]; then
+	if [ "${_HAS_NEW_VERSIONS}" == false ]; then
 		echo "[OK]: No new versions found, nothing to update."
 		exit 0
 	fi
 
-	if [ "${_CREATE_BRANCH}" = true ]; then
+	if [ "${_CREATE_BRANCH}" == true ]; then
 		_current_dt="$(date -u '+%y%m%d-%H%M%S')"
 		_new_branch_name="deps/update-${_current_dt}"
 		git checkout -b "${_new_branch_name}" || exit 2
 	fi
 
-	if [ "${_IS_COMMIT}" = true ]; then
+	if [ "${_IS_COMMIT}" == true ]; then
 		echo "[INFO]: Committing changes..."
 		git add "${COMPOSE_FILE_PATH}" || exit 2
 		git commit -m ":arrow_up::whale: Update docker compose.yml dependency/image versions." || exit 2
 		echo "[OK]: Done."
 
-		if [ "${_IS_PUSH}" = true ]; then
+		if [ "${_IS_PUSH}" == true ]; then
 			if [ "${_CREATE_BRANCH}" = true ]; then
 				echo "[INFO]: Pushing changes to new branch '${_new_branch_name}'..."
 				git push -u origin "${_new_branch_name}" || exit 2
@@ -155,15 +158,15 @@ main()
 				echo "[OK]: Done."
 			fi
 
-			if [ "${_CREATE_PR}" = true ]; then
-				if [ "${_CREATE_BRANCH}" = true ]; then
+			if [ "${_CREATE_PR}" == true ]; then
+				if [ "${_CREATE_BRANCH}" == true ]; then
 					echo "[INFO]: Creating pull request..."
 					gh pr create \
 						-t "Update docker compose.yml dependency/image versions" \
-						-b "This PR updates the versions of images in the docker-compose file." \
+						-b "This PR updates the versions of images in the docker compose.yml file." \
 						-l "dependencies" \
-						-B dev \
-						-r "${REPO_OWNER}" || exit 2
+						-r "${REPO_OWNER}" \
+						-B dev || exit 2
 					echo "[OK]: Done."
 				else
 					echo "[WARN]: You cannot create a pull request without a new branch!"
