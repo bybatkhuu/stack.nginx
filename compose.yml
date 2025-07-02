@@ -16,9 +16,8 @@ services:
       - "./volumes/storage/nginx/ssl:/etc/letsencrypt"
     network_mode: host
     tty: true
-
   nginx:
-    image: bybatkhuu/nginx:3.0.7-250605
+    image: bybatkhuu/nginx:3.0.8-250702
     depends_on:
       - certbot
     restart: unless-stopped
