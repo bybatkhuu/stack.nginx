@@ -167,25 +167,25 @@ docker compose config
 **[IMPORTANT]** Please, check nginx configuration and best practices:
 
 - <https://www.udemy.com/course/nginx-fundamentals>
-- <https://www.baeldung.com/linux/nginx-config-environment-variables>
-- <https://www.youtube.com/watch?v=pkHQCPXaimU>
+- <https://www.digitalocean.com/community/tools/nginx>
 - <https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes>
 - <https://www.nginx.com/nginx-wiki/build/dirhtml/start/topics/tutorials/config_pitfalls>
-- <https://www.digitalocean.com/community/tools/nginx>
+- <https://www.youtube.com/watch?v=pkHQCPXaimU>
+- <https://www.baeldung.com/linux/nginx-config-environment-variables>
 - <https://github.com/fcambus/nginx-resources>
 
-Use template files in [**`templates/nginx.conf`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/nginx.conf) to configure NGINX:
+Use template files in [**`templates/nginx.conf`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/nginx.conf/static) to configure NGINX:
 
 ```sh
 # Copy template file into storage directory:
-cp -v ./templates/nginx.conf/[TEMPLATE_BASENAME].conf.template ./volumes/storage/nginx/configs/templates/[CUSTOM_BASENAME].conf.template
+cp -v ./templates/nginx.conf/static/[TEMPLATE_BASENAME].conf ./volumes/storage/nginx/configs/site-enabled/[CUSTOM_BASENAME].conf
 # For example, Let's Encrypt HTTPS configuration for example.com domain:
-cp -v ./templates/nginx.conf/100.example.com_https.lets.conf.template ./volumes/storage/nginx/configs/templates/100.example.com.conf.template
+cp -v ./templates/nginx.conf/static/100.example.com.lets.conf ./volumes/storage/nginx/configs/site-enabled/100.example.com.conf
 
 # Edit template file to fit in your nginx configuration:
-nano ./volumes/storage/nginx/configs/templates/[CUSTOM_BASENAME].conf.template
+nano ./volumes/storage/nginx/configs/site-enabled/[CUSTOM_BASENAME].conf
 # For example:
-nano ./volumes/storage/nginx/configs/templates/100.example.com.conf.template
+nano ./volumes/storage/nginx/configs/site-enabled/100.example.com.conf
 ```
 
 ### 5. 🚀 Start docker compose

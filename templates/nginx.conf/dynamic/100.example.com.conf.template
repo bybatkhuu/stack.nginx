@@ -1,41 +1,40 @@
-upstream api-server {
-	server 127.0.0.1:8000;
+## HTTP redirect:
+server {
+	listen ${NGINX_HTTP_PORT};
+	listen [::]:${NGINX_HTTP_PORT};
+	server_name .${DOMAIN};
 
-	## Or Load Balancing:
-	# least_conn;
-	# hash ${DOLLAR}binary_remote_addr consistent;
-	# server 127.0.0.1:8000;
-	# server 127.0.0.1:8001;
-	# server 127.0.0.1:8002;
+	location / {
+		return 301 https://${DOLLAR}host${DOLLAR}request_uri;
+	}
 }
 
-
-# Main domain as static files (HTTPS):
+## Main domain as static files (HTTPS):
 server {
-	listen 443 ssl;
-	listen [::]:443 ssl;
+	listen ${NGINX_HTTPS_PORT} ssl;
+	listen [::]:${NGINX_HTTPS_PORT} ssl;
 	http2 on;
-	server_name example.com www.example.com;
+	server_name ${DOMAIN} www.${DOMAIN};
 
 	## Logging:
 	access_log /dev/stdout realip_combined if=${DOLLAR}loggable;
-	access_log /var/log/nginx/example.com.access.${DOLLAR}map_date_now.log realip_combined if=${DOLLAR}loggable;
-	access_log /var/log/nginx/example.com.access.json.${DOLLAR}map_date_now.log json_combined if=${DOLLAR}loggable;
-	# access_log /var/log/nginx/example.com.access.json.${DOLLAR}map_date_now.log cf_json_combined if=${DOLLAR}loggable;
+	access_log /var/log/nginx/${DOMAIN}.access.${DOLLAR}map_date_now.log realip_combined if=${DOLLAR}loggable;
+	access_log /var/log/nginx/${DOMAIN}.access.json.${DOLLAR}map_date_now.log json_combined if=${DOLLAR}loggable;
+	# access_log /var/log/nginx/${DOMAIN}.access.json.${DOLLAR}map_date_now.log cf_json_combined if=${DOLLAR}loggable;
 
 	## Restrict methods:
 	if (${DOLLAR}request_method ~ ^(TRACE)${DOLLAR}) {
-		return '405';
+		return 405;
 	}
 
 	## SSL:
 	include /etc/nginx/conf.d/ssl.conf;
 	ssl_stapling on;
-	ssl_certificate /etc/nginx/ssl/example.com/cert.pem;
-	ssl_certificate_key /etc/nginx/ssl/example.com/key.pem;
+	ssl_certificate /etc/nginx/ssl/${DOMAIN}/cert.pem;
+	ssl_certificate_key /etc/nginx/ssl/${DOMAIN}/key.pem;
 
 	## Security headers:
-	add_header Access-Control-Allow-Origin "https://example.com" always;
+	add_header Access-Control-Allow-Origin "https://${DOMAIN}" always;
 	include /etc/nginx/conf.d/security-headers.conf;
 
 	## Additional configs:
@@ -43,7 +42,7 @@ server {
 	include /etc/nginx/conf.d/well-known.conf;
 
 	## Static files:
-	root /var/www/example.com/public;
+	root /var/www/${DOMAIN}/public;
 
 	location / {
 		try_files ${DOLLAR}uri ${DOLLAR}uri.html ${DOLLAR}uri/ =404;
@@ -58,36 +57,49 @@ server {
 
 	## Sub-path as static files:
 	# location ^~ /demo {
-	# 	alias /var/www/demo.example.com/public;
+	# 	alias /var/www/demo.${DOMAIN}/public;
 	# 	try_files ${_DOLLAR}uri ${_DOLLAR}uri/ =404;
 	# }
 
 	# include /etc/nginx/conf.d/status.conf;
 }
 
+
+## Upstream for proxy_pass:
+upstream ${API_UPSTREAM_NAME} {
+	server ${API_HOST}:${API_PORT};
+
+	## Or Load Balancing:
+	# least_conn;
+	# hash ${DOLLAR}binary_remote_addr consistent;
+	# server ${API_HOST}:8000;
+	# server ${API_HOST}:8001;
+	# server ${API_HOST}:8002;
+}
+
 ## Subdomain as reverse proxy (HTTPS):
 server {
-	listen 443 ssl;
-	listen [::]:443 ssl;
+	listen ${NGINX_HTTPS_PORT} ssl;
+	listen [::]:${NGINX_HTTPS_PORT} ssl;
 	http2 on;
-	server_name api.example.com;
+	server_name ${API_DOMAIN};
 
 	## Logging:
 	access_log /dev/stdout realip_combined;
-	access_log /var/log/nginx/api.example.com.access.${DOLLAR}map_date_now.log realip_combined;
-	access_log /var/log/nginx/api.example.com.access.json.${DOLLAR}map_date_now.log json_combined;
-	# access_log /var/log/nginx/api.example.com.access.json.${DOLLAR}map_date_now.log cf_json_combined if=${DOLLAR}loggable;
+	access_log /var/log/nginx/${API_DOMAIN}.access.${DOLLAR}map_date_now.log realip_combined;
+	access_log /var/log/nginx/${API_DOMAIN}.access.json.${DOLLAR}map_date_now.log json_combined;
+	# access_log /var/log/nginx/${API_DOMAIN}.access.json.${DOLLAR}map_date_now.log cf_json_combined if=${DOLLAR}loggable;
 
 	## Restrict methods:
 	if (${DOLLAR}request_method ~ ^(TRACE)${DOLLAR}) {
-		return '405';
+		return 405;
 	}
 
 	## SSL:
 	include /etc/nginx/conf.d/ssl.conf;
 	ssl_stapling on;
-	ssl_certificate /etc/nginx/ssl/example.com/cert.pem;
-	ssl_certificate_key /etc/nginx/ssl/example.com/key.pem;
+	ssl_certificate /etc/nginx/ssl/${DOMAIN}/cert.pem;
+	ssl_certificate_key /etc/nginx/ssl/${DOMAIN}/key.pem;
 
 	## Security headers:
 	# include /etc/nginx/conf.d/security-headers.conf;
@@ -103,17 +115,6 @@ server {
 	## Reverse proxy:
 	location / {
 		# rewrite ^/api/(.*)${DOLLAR} /${DOLLAR}1?${DOLLAR}args break;
-		proxy_pass http://api-server;
-	}
-}
-
-## HTTP redirect:
-server {
-	listen 80;
-	listen [::]:80;
-	server_name .example.com;
-
-	location / {
-		return 301 https://${DOLLAR}host${DOLLAR}request_uri;
+		proxy_pass http://${API_UPSTREAM_NAME};
 	}
 }

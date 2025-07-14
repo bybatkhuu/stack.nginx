@@ -3,9 +3,8 @@
 # ## Cloudflare settings:
 # include /etc/nginx/conf.d/cloudflare/whitelist.conf;
 
-
 # server {
-# 	listen 192.168.0.1:80;
+# 	listen ${NGINX_HOST}:${NGINX_HTTP_PORT};
 
 # 	## Nginx stats (basic auth):
 # 	location = /status {

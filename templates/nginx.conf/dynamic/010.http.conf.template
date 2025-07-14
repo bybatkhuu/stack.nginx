@@ -1,19 +1,19 @@
-upstream api-server {
-	server 127.0.0.1:8000;
+## Upstream for proxy_pass:
+upstream ${API_UPSTREAM_NAME} {
+	server ${API_HOST}:${API_PORT};
 
 	## Or Load Balancing:
 	# least_conn;
 	# hash ${DOLLAR}binary_remote_addr consistent;
-	# server 127.0.0.1:8000;
-	# server 127.0.0.1:8001;
-	# server 127.0.0.1:8002;
+	# server ${API_HOST}:8000;
+	# server ${API_HOST}:8001;
+	# server ${API_HOST}:8002;
 }
-
 
 ## HTTP:
 server {
-	listen 80;
-	listen [::]:80;
+	listen ${NGINX_HTTP_PORT};
+	listen [::]:${NGINX_HTTP_PORT};
 
 	## Logging:
 	access_log /dev/stdout realip_combined if=${DOLLAR}loggable;
@@ -23,7 +23,7 @@ server {
 
 	## Restrict methods:
 	if (${DOLLAR}request_method ~ ^(TRACE)${DOLLAR}) {
-		return '405';
+		return 405;
 	}
 
 	## Security headers:
@@ -64,7 +64,7 @@ server {
 		# include /etc/nginx/conf.d/proxy-timeout.conf;
 		include /etc/nginx/conf.d/api-headers.conf;
 
-		proxy_pass http://api-server;
+		proxy_pass http://${API_UPSTREAM_NAME};
 	}
 
 	# include /etc/nginx/conf.d/status.conf;
