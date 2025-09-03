@@ -5,8 +5,6 @@ on:
     workflows: ["1. Bump Version"]
     types:
       - completed
-    branches:
-      - main
   workflow_dispatch:
 
 env:
@@ -15,7 +13,7 @@ env:
 jobs:
   create_release:
     name: Create Release
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
       actions: write
@@ -23,7 +21,11 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+      - name: Get latest version
+        run: |
+          git pull origin main
+          echo "Current version: v$(./scripts/get-version.sh)"
       - name: Create release
         run: ./scripts/release.sh
       - name: Check Workflow

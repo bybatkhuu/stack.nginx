@@ -1,7 +1,8 @@
-.PHONY: help validate start logs stop compose clean get-version bump-version backup docs changelog
+.PHONY: help depends validate start logs stop compose clean get-version bump-version release changelog docs backup
 
 help:
 	@echo "make help         -- show this help"
+	@echo "make depends      -- check docker-compose dependencies"
 	@echo "make validate	 -- validate docker-compose files"
 	@echo "make start        -- start docker-compose services"
 	@echo "make logs         -- show docker-compose logs for all services"
@@ -10,10 +11,13 @@ help:
 	@echo "make clean        -- clean leftovers and build files"
 	@echo "make get-version  -- get current version"
 	@echo "make bump-version -- bump version"
-	@echo "make backup       -- backup storage data"
-	@echo "make docs         -- generate documentation"
+	@echo "make release      -- release new version"
 	@echo "make changelog    -- update changelog"
+	@echo "make docs         -- generate documentation"
+	@echo "make backup       -- backup storage data"
 
+depends:
+	./scripts/depends.sh $(MAKEFLAGS)
 
 validate:
 	./compose.sh validate
@@ -25,7 +29,7 @@ logs:
 	./compose.sh logs
 
 stop:
-	./compose.sh down
+	./compose.sh stop
 
 compose:
 	./compose.sh $(MAKEFLAGS)
@@ -39,11 +43,14 @@ get-version:
 bump-version:
 	./scripts/bump-version.sh $(MAKEFLAGS)
 
-backup:
-	./scripts/backup.sh
+release:
+	./scripts/release.sh
+
+changelog:
+	./scripts/changelog.sh $(MAKEFLAGS)
 
 docs:
 	./scripts/docs.sh $(MAKEFLAGS)
 
-changelog:
-	./scripts/changelog.sh $(MAKEFLAGS)
+backup:
+	./scripts/backup.sh

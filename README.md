@@ -135,8 +135,8 @@ nano .env
 
 You can use below template **`compose.override.yml`** files for different environments:
 
-- **DEVELOPMENT**: [**`compose.override.dev.yml`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/compose/compose.override.dev.yml)
-- **PRODUCTION/STAGING**: [**`compose.override.prod.yml`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/compose/compose.override.prod.yml)
+- **DEVELOPMENT**: [**`compose.override.dev.yml`**](./templates/compose/compose.override.dev.yml)
+- **PRODUCTION/STAGING**: [**`compose.override.prod.yml`**](./templates/compose/compose.override.prod.yml)
 
 ```sh
 # Copy 'compose.override.[ENV].yml' file to 'compose.override.yml' file:
@@ -174,7 +174,7 @@ docker compose config
 - <https://www.baeldung.com/linux/nginx-config-environment-variables>
 - <https://github.com/fcambus/nginx-resources>
 
-Use template files in [**`templates/nginx.conf`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/nginx.conf/static) to configure NGINX:
+Use template files in [**`templates/nginx.conf`**](./templates/nginx.conf/static) to configure NGINX:
 
 ```sh
 # Copy template file into storage directory:
@@ -266,7 +266,7 @@ docker compose down --remove-orphans
 
 You can use the following environment variables to configure:
 
-[**`.env.example`**](https://github.com/bybatkhuu/stack.nginx/blob/main/.env.example):
+[**`.env.example`**](./.env.example):
 
 ```sh
 ## --- CERTBOT configs --- ##
@@ -283,6 +283,7 @@ NGINX_BASIC_AUTH_PASS="NGINX_ADMIN_PASSWORD123" # !!! CHANGE THIS TO RANDOM PASS
 ## -- Docker configs -- ##
 # NGINX_HTTP_PORT=80 # port for bridge network mode
 # NGINX_HTTPS_PORT=443 # port for bridge network mode
+# NGINX_GRPC_PORT=443  # port for bridge network mode
 ```
 
 ### 🐳 Docker container command arguments
@@ -301,7 +302,7 @@ You can use the following arguments to configure:
     Run only bash shell.
 ```
 
-For example as in [**`compose.override.yml`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/compose/compose.override.dev.yml) file:
+For example as in [**`compose.override.yml`**](./templates/compose/compose.override.dev.yml) file:
 
 ```yml
     command: ["--https=self"]
@@ -327,7 +328,7 @@ For example as in [**`compose.override.yml`**](https://github.com/bybatkhuu/stac
     Run only bash shell.
 ```
 
-For example as in [**`compose.override.yml`**](https://github.com/bybatkhuu/stack.nginx/blob/main/templates/compose/compose.override.dev.yml) file:
+For example as in [**`compose.override.yml`**](./templates/compose/compose.override.dev.yml) file:
 
 ```yml
     command: ["--server=production"]

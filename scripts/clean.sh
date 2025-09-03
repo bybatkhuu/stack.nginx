@@ -8,6 +8,7 @@ _SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 _PROJECT_DIR="$(cd "${_SCRIPT_DIR}/.." >/dev/null 2>&1 && pwd)"
 cd "${_PROJECT_DIR}" || exit 2
 
+
 # Loading .env file:
 if [ -f ".env" ]; then
 	# shellcheck disable=SC1091
@@ -49,7 +50,7 @@ main()
 					_IS_FORCE=true
 					shift;;
 				*)
-					echo "[ERROR]: Failed to parse input -> ${_input}"
+					echo "[ERROR]: Failed to parse input -> ${_input}!"
 					echo "[INFO]: USAGE: ${0}  -l, --logs | -d, --data | -b, --backups | -a, --all | -f, --force"
 					exit 1;;
 			esac

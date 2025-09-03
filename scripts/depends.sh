@@ -8,6 +8,7 @@ _SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 _PROJECT_DIR="$(cd "${_SCRIPT_DIR}/.." >/dev/null 2>&1 && pwd)"
 cd "${_PROJECT_DIR}" || exit 2
 
+
 # Loading .env file (if exists):
 if [ -f ".env" ]; then
 	# shellcheck disable=SC1091
@@ -26,7 +27,7 @@ if [ -z "$(which gh)" ]; then
 fi
 
 if ! gh auth status >/dev/null 2>&1; then
-	echo "[ERROR]: You need to login: 'gh auth login'"
+	echo "[ERROR]: You need to login: 'gh auth login'!"
 	exit 1
 fi
 
@@ -89,7 +90,7 @@ main()
 					_CREATE_PR=true
 					shift;;
 				*)
-					echo "[ERROR]: Failed to parse input -> ${_input}"
+					echo "[ERROR]: Failed to parse input -> ${_input}!"
 					echo "[INFO]: USAGE: ${0}  -b, --branch | -c, --commit | -p, --push | -r, --pull-request"
 					exit 1;;
 			esac
