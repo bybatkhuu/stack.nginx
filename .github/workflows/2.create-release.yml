@@ -1,11 +1,14 @@
 name: 2. Create Release
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["1. Bump Version"]
     types:
       - completed
-  workflow_dispatch:
+  push:
+    tags:
+      - "v*.*.*-*"
 
 env:
   _WORKFLOW_STATE: active
