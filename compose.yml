@@ -1,6 +1,6 @@
 services:
   certbot:
-    image: bybatkhuu/certbot:3.0.2-250528
+    image: bybatkhuu/certbot:3.0.3-250901
     restart: unless-stopped
     environment:
       - TERM=${TERM:-xterm}
@@ -16,8 +16,9 @@ services:
       - "./volumes/storage/nginx/ssl:/etc/letsencrypt"
     network_mode: host
     tty: true
+
   nginx:
-    image: bybatkhuu/nginx:3.0.8-250702
+    image: bybatkhuu/nginx:3.1.0-250903
     depends_on:
       - certbot
     restart: unless-stopped

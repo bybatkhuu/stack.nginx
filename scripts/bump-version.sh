@@ -8,6 +8,7 @@ _SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 _PROJECT_DIR="$(cd "${_SCRIPT_DIR}/.." >/dev/null 2>&1 && pwd)"
 cd "${_PROJECT_DIR}" || exit 2
 
+
 # Loading .env file (if exists):
 if [ -f ".env" ]; then
 	# shellcheck disable=SC1091
@@ -50,7 +51,7 @@ main()
 					_IS_PUSH=true
 					shift;;
 				*)
-					echo "[ERROR]: Failed to parse input -> ${_input}"
+					echo "[ERROR]: Failed to parse input -> ${_input}!"
 					echo "[INFO]: USAGE: ${0}  -b=*, --bump-type=* [major | minor | patch] | -c, --commit | -t, --tag | -p, --push"
 					exit 1;;
 			esac
@@ -60,12 +61,12 @@ main()
 
 
 	if [ -z "${_BUMP_TYPE:-}" ]; then
-		echo "[ERROR]: Bump type is empty! Use '-b=' or '--bump-type=' argument!"
+		echo "[ERROR]: Bump type is empty, use '-b=' or '--bump-type=' argument!"
 		exit 1
 	fi
 
 	if [ "${_BUMP_TYPE}" != "major" ] && [ "${_BUMP_TYPE}" != "minor" ] && [ "${_BUMP_TYPE}" != "patch" ]; then
-		echo "[INFO]: Bump type '${_BUMP_TYPE}' is invalid, should be: 'major', 'minor' or 'patch'!"
+		echo "[ERROR]: Bump type '${_BUMP_TYPE}' is invalid, should be: 'major', 'minor' or 'patch'!"
 		exit 1
 	fi
 

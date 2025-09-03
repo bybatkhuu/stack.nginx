@@ -7,6 +7,14 @@ set -euo pipefail
 _PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 cd "${_PROJECT_DIR}" || exit 2
 
+
+# Loading .env file (if exists):
+if [ -f ".env" ]; then
+	# shellcheck disable=SC1091
+	source .env
+fi
+
+
 # Checking docker and docker-compose installed:
 if [ -z "$(which docker)" ]; then
 	echo "[ERROR]: 'docker' not found or not installed!"
@@ -22,12 +30,6 @@ if ! docker compose > /dev/null 2>&1; then
 	echo "[ERROR]: 'docker compose' not found or not installed!"
 	exit 1
 fi
-
-# Loading .env file (if exists):
-if [ -f ".env" ]; then
-	# shellcheck disable=SC1091
-	source .env
-fi
 ## --- Base --- ##
 
 
@@ -39,7 +41,6 @@ _DEFAULT_SERVICE="nginx"
 ## --- Functions --- ##
 _doBuild()
 {
-	# ./scripts/build.sh || exit 2
 	# shellcheck disable=SC2068
 	docker compose build ${@:-} || exit 2
 }
@@ -232,7 +233,7 @@ main()
 			shift
 			_doUpdate "${@:-}";;
 		*)
-			echo "[ERROR]: Failed to parse input: ${*}"
+			echo "[ERROR]: Failed to parse input: ${*}!"
 			_exitOnWrongParams;;
 	esac
 

@@ -6,14 +6,14 @@ on:
 jobs:
   update_deps:
     name: Update Dependencies
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
       actions: write
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Update dependencies

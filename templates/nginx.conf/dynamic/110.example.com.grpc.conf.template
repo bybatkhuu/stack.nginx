@@ -1,0 +1,59 @@
+include /etc/nginx/conf.d/grpc/log-format.conf;
+
+## Upstream for grpc proxy_pass:
+upstream ${GRPC_UPSTREAM_NAME} {
+	server ${GRPC_HOST}:${GRPC_PORT};
+
+	# least_conn;
+	# hash ${DOLLAR}binary_remote_addr consistent;
+	# server ${GRPC_HOST}:8000;
+	# server ${GRPC_HOST}:8081;
+	# server ${GRPC_HOST}:8082;
+}
+
+## Subdomain as reverse proxy:
+server {
+	listen ${NGINX_GRPC_PORT} ssl;
+	listen [::]:${NGINX_GRPC_PORT} ssl;
+	http2 on;
+	server_name ${GRPC_DOMAIN};
+
+	## Logging:
+	access_log /dev/stdout grpc_log;
+	access_log /var/log/nginx/${GRPC_DOMAIN}.grpc_access.log grpc_log;
+	access_log /var/log/nginx/${GRPC_DOMAIN}.grpc_access.json.log grpc_json;
+
+	## SSL:
+	include /etc/nginx/conf.d/ssl.conf;
+	# ssl_stapling off;
+	ssl_certificate /etc/nginx/ssl/live/${DOMAIN}/fullchain.pem;
+	ssl_certificate_key /etc/nginx/ssl/live/${DOMAIN}/privkey.pem;
+	ssl_trusted_certificate /etc/nginx/ssl/live/${DOMAIN}/chain.pem;
+
+	## Cloudflare headers:
+	# include /etc/nginx/conf.d/cloudflare/proxy.conf;
+
+	## Proxy headers:
+	# include /etc/nginx/conf.d/proxy.conf;
+	# include /etc/nginx/conf.d/proxy-timeout.conf;
+
+	## Reverse proxy:
+	location / {
+		# rewrite ^/api/(.*)${DOLLAR} /${DOLLAR}1?${DOLLAR}args break;
+		grpc_pass grpc://${GRPC_UPSTREAM_NAME};
+
+		grpc_set_header Host ${DOLLAR}host;
+		grpc_set_header X-Real-IP ${DOLLAR}remote_addr;
+		grpc_set_header X-Forwarded-For ${DOLLAR}proxy_add_x_forwarded_for;
+		grpc_set_header X-Forwarded-Proto ${DOLLAR}scheme;
+		error_page 502 = /error502grpc;
+	}
+
+	location = /error502grpc {
+		internal;
+		default_type application/grpc;
+		add_header grpc-status 14;
+		add_header grpc-message "unavailable";
+		return 204;
+	}
+}
