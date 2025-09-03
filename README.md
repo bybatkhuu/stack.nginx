@@ -283,6 +283,7 @@ NGINX_BASIC_AUTH_PASS="NGINX_ADMIN_PASSWORD123" # !!! CHANGE THIS TO RANDOM PASS
 ## -- Docker configs -- ##
 # NGINX_HTTP_PORT=80 # port for bridge network mode
 # NGINX_HTTPS_PORT=443 # port for bridge network mode
+# NGINX_GRPC_PORT=443  # port for bridge network mode
 ```
 
 ### 🐳 Docker container command arguments
