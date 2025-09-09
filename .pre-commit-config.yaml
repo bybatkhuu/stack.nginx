@@ -3,17 +3,22 @@ default_language_version:
   python: python3.10
 exclude: |
   (?x)^(
-      \.git/
-    | \.venv/
-    | \.env/
-    | venv/
-    | env/
-    | site-packages/
-    | node_modules/
-    | volumes/
-    | logs/
-    | data/
-    | datasets/
+      \.git/.*
+    | \.venv/.*
+    | \.env/.*
+    | venv/.*
+    | env/.*
+    | site-packages/.*
+    | node_modules/.*
+    | volumes/.*
+    | log/.*
+    | logs/.*
+    | backup/.*
+    | backups/.*
+    | data/.*
+    | dataset/.*
+    | datasets/.*
+    | tmp/.*
   )$
 
 repos:
