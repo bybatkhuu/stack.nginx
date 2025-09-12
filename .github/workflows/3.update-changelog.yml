@@ -1,11 +1,11 @@
 name: 3. Update Changelog
 
 on:
+  workflow_dispatch:
   # workflow_run:
   #   workflows: ["2. Create Release"]
   #   types:
   #     - completed
-  workflow_dispatch:
 
 jobs:
   build_publish:
